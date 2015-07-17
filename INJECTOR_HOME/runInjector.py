@@ -34,6 +34,9 @@ def main():
     
     cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
+    cmd = 'pkill -9 -f dhtinjector.jar'
+    launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': str(os.getlogin())}).run()
+
     cmd = 'cd '+os.environ["INJECTOR_HOME"]+';'\
     'cp ./config/injector.properties ./config/injector.properties.orig;'\
     'sed "s/peers.number.*/peers.number ='+str(args.nbNodes)+'/g" ./config/injector.properties > /tmp/injector.properties;'\
@@ -44,6 +47,7 @@ def main():
     'cp /tmp/injector.properties ./config/injector.properties;'\
     'java -jar target/scala-2.10/dhtinjector.jar 2>&1 > ./dhtinjector-log-'+str(args.experimentId)+'.log 0<&- 2>&-'
     print service_node +'/'+ cmd
+    
     launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': str(os.getlogin())}).run()
     print "The injector has been launched." 
 

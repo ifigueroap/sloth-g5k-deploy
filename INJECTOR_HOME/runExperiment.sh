@@ -39,7 +39,6 @@ function executeExperiment {
     else
        echo "./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID"
        echo $PWD
-       echo "./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID"
        ./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID
     fi
     
