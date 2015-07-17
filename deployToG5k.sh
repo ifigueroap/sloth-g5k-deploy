@@ -12,7 +12,7 @@ git add .
 git commit -m "New release of Sloth / Injector"
 git push
 
-rsync -avrz -e ssh --progress . g5k:lyon/DHT-EXP
+rsync -avrzd -e ssh --progress . g5k:lyon/DHT-EXP
 
 
 
