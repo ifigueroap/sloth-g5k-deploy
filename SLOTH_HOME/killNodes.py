@@ -7,7 +7,7 @@ from execo import TaktukRemote, TaktukPut, default_connection_params, logger, Pr
 
 
 parser = argparse.ArgumentParser(description="Kill Sloth DHT Nodes")
-parser.add_argument('--nodes_address_file', help="Absolute pathname to the file indicating the peer addresses", required=True, metavar="F", default = "./config/nodes_address.txt")
+parser.add_argument('-f', '--nodes_address_file', dest='nodes_address_file', help="Absolute pathname to the file indicating the peer addresses", required=True, metavar="F", default = "./config/nodes_address.txt")
 
 
 args = parser.parse_args()
