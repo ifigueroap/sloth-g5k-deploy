@@ -34,8 +34,11 @@ function executeExperiment {
     cd $SLOTH_HOME
     if [ "$INJECTION_MODE" != "in_vivo" ]; then 
        echo "./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID --no-stabilization"
-       ./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID --no-stabilization 
+       echo $PWD
+       ./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID --no-stabilization
     else
+       echo "./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID"
+       echo $PWD
        echo "./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID"
        ./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID
     fi
