@@ -4,7 +4,7 @@ import os
 import subprocess
 import time
 import argparse
-from execo import TaktukRemote, TaktukPut
+from execo import TaktukRemote
 
 parser = argparse.ArgumentParser(description="Run Sloth DHT Nodes")
 parser.add_argument('nbNodes', type=int, metavar="N", help="Number of nodes")
@@ -39,18 +39,14 @@ def main():
     httpports = [s.strip().split(':')[2] for s in nodesInfos]
     flags = ['-ifd'] + ['-fd'] * (args.nbNodes - 1)
 
-    print hosts[0]+' '+httpports[0]+' '+flags[0]+' file:'+args.nodes_address_file
     #print hosts
     #print akkaports
     #print httpports
     #print flags
     
-    # Copy the known address file 
-    cp = TaktukPut(hosts, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
-    
     cmd = 'rm /tmp/sloth_launcher*; cd '+os.environ["SLOTH_HOME"]+' ; ./startNode.sh '+args.dataMode+' {{[akkaport for akkaport in akkaports]}} '+str(args.experimentId)+' --mode '+args.dataMode+' --port {{[akkaport for akkaport in akkaports]}} --http-port {{[httpport for httpport in httpports]}} {{[flag for flag in flags]}} '+otherFlags +' 2>&1 >/tmp/sloth_launcher_{{[akkaport for akkaport in akkaports]}}.log 0<&- 2>&- &'
    # print cmd
-    launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': 'alebre'}).run()
+    launch_sloths = TaktukRemote(cmd,hosts).run()
     print "Peers have been launched." 
 
 if __name__ == "__main__":
