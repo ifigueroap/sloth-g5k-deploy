@@ -34,7 +34,7 @@ def main():
     
     cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
-    cmd = 'pkill -9 java ; killall java;  cd '+os.environ["INJECTOR_HOME"]+';'\
+    cmd = 'pkill -9 -f dhtinjector.jar ;  cd '+os.environ["INJECTOR_HOME"]+';'\
     'cp ./config/injector.properties ./config/injector.properties.orig;'\
     'sed "s/peers.number.*/peers.number ='+str(args.nbNodes)+'/g" ./config/injector.properties > /tmp/injector.properties;'\
     'cp /tmp/injector.properties ./config/injector.properties;'\
