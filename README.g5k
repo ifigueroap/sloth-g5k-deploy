@@ -1,0 +1,56 @@
+This is a stupid readme file to book nodes and make experiments on Grid'5000. 
+The README has been written considering you are connected to the Lyon frontend
+inside the DHT-EXP.  
+!!!!!!
+WARNING: THE CURRENT SCRIPTS ARE NOT ROBUST ENOUGH TO DEPLOY ON LYON' NODES,
+INDEED IT DELETES THE DHT-EXP ON THE EACH NFS SERVER THAT IS INVOLVED IN THE
+EXPERIMENT. 
+!!!!!!!
+
+## ####
+## First step - book some nodes with the funk command, for instance the following invokation
+## looks for 4 nodes on Nantes (econome) and 3 nodes on Rennes (Parapide cluster) for 6hours and 30 min
+## with all mandatory actions to deploy/configure the nodes as you want. 
+
+funk -r econome:4,parapide:3 -m free -w 6:30:00 -k -o "-t deploy  -t allow_classic_ssh"
+
+## note that funk is going to propose you to book the nodes but by default it does not. 
+## Funk should return something like 
+## ..
+##oargridsub -v -s "2015-07-17 17:38:39" -w "1:20:0" -t deploy  -t allow_classic_ssh rennes:rdef="{\\\\\\\"type='kavlan-global'\\\\\\\"}/vlan=1+{\\\\\\\"cluster='parapide'\\\\\\\"}/nodes=3":name="FUNK",nantes:rdef="{\\\\\\\"cluster='econome'\\\\\\\"}/nodes=4":name="FUNK"
+##Do you want to do the reservation (y/[N]): y
+##2015-07-17 17:37:59,478 INFO: Grid reservation done, oargrid_job_id = 53560
+##2015-07-17 17:38:00,635 INFO: Jobs
+##nantes               22093
+##rennes              716935
+##Key file: /tmp/oargrid/oargrid_ssh_key_alebre_53560
+
+## ####
+## Second step - Configure your nodes with the configure-nodes.py script
+
+./configure-nodes.py -j nantes:22093 rennes:71635
+
+## please note that the given jobs correspond to the ones returned by funk
+## It is noteworthy that the process is quite long (around 15/20 min) as the script redeploys the nodes and c
+## install the missing debian package. 
+## At the end of the script you should get something like : 
+## Nodes are now ready, you should launch ./INJECTOR_HOME/runExperiment.sh ... from the lyon frontend
+## The list of sloth peers is in ./peers.list
+## The injector will run on paravent-1.rennes.grid5000.fr
+## /home/alebre/DHT-EXP
+## The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo 64 /home/alebre/DHT-EXP/peers.list paravent-1.rennes.grid5000.fr
+
+## ####
+## Third step -  Launch the experiment has proposed by the ./configure-nodes.py file
+export SLOTH_HOME=~/DHT-EXP/SLOTH_HOME
+export INJECTOR_HOME=~/DHT-EXP/INJECTOR_HOME
+./INJECTOR_HOME/runExperiment.sh in_vivo 64 /home/alebre/DHT-EXP/peers.list paravent-1.rennes.grid5000.fr
+
+## ####
+## OPTIONAL
+## Each time you want to refresh the jar from lyon to other sites you should use the 
+## push-files.py script
+push-files.py --nodes-address-file ./peers.list
+## Each time you want to kill the sloth peers you should invoke the killNodes.py script
+./SLOTH_HOME/killNodes.py --nodes-address-file peers.list
+
