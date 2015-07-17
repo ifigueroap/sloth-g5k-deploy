@@ -6,6 +6,7 @@ import time
 import argparse
 from execo import TaktukRemote
 
+
 parser = argparse.ArgumentParser(description="Run Sloth DHT Nodes")
 parser.add_argument('nbNodes', type=int, metavar="N", help="Number of nodes")
 parser.add_argument('dataMode', metavar="M", help="Data Mode = eager | lazy")
