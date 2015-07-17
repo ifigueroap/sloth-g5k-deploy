@@ -21,7 +21,7 @@ function executeExperiment {
     echo "Starting ${MODE} Experiment"
 
     NODEFILE=/tmp/$( basename $ORIG_NODEFILE)
-    head -n $((NBNODE + 1)) $ORIG_NODEFILE > $NODEFILE
+    head -n $((NBNODE)) $ORIG_NODEFILE > $NODEFILE
     # TODO check number of lines
     echo "Number of peers available $(wc -l $NODEFILE) (requested: $NBNODE)"
 
