@@ -64,7 +64,7 @@ def main():
     print "Nodes are now ready, you should launch ./INJECTOR_HOME/runExperiment.sh ... from the lyon frontend"
     print "The list of sloth peers is in ./peers.list"
     print "The injector will run on %s" % nodes[-1].address
-    print "The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.list %s" % (i,+os.system('pwd'),nodes[-1].address) 
+    print "The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.list %s" % (i,os.getcwd(),nodes[-1].address) 
  
 if __name__ == "__main__":
     try: 
