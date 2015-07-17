@@ -50,7 +50,7 @@ def main():
     
     cmd = 'rm /tmp/sloth_launcher*; cd '+os.environ["SLOTH_HOME"]+' ; ./startNode.sh '+args.dataMode+' {{[akkaport for akkaport in akkaports]}} '+str(args.experimentId)+' --mode '+args.dataMode+' --port {{[akkaport for akkaport in akkaports]}} --http-port {{[httpport for httpport in httpports]}} {{[flag for flag in flags]}} '+otherFlags +' 2>&1 >/tmp/sloth_launcher_{{[akkaport for akkaport in akkaports]}}.log 0<&- 2>&- &'
    # print cmd
-    launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': 'alebre'}).run()
+    launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': '+str(os.getLogin())+'}).run()
     print "Peers have been launched." 
 
 if __name__ == "__main__":

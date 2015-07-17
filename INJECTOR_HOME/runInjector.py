@@ -44,7 +44,7 @@ def main():
     'cp /tmp/injector.properties ./config/injector.properties;'\
     'java -jar target/scala-2.10/dhtinjector.jar 2>&1 > ./dhtinjector-log-'+str(args.experimentId)+'.log 0<&- 2>&-'
     print service_node +'/'+ cmd
-    launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': 'alebre'}).run()
+    launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': '+str(os.getLogin())+'}).run()
     print "The injector has been launched." 
 
 if __name__ == "__main__":
