@@ -1,6 +1,6 @@
 #!/bin/bash
 
-./copyFiles
+./copyFiles.sh
 
 git add .
 git commit -m "New release of Sloth / Injector"
