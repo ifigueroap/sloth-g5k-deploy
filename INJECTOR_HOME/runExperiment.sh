@@ -33,8 +33,10 @@ function executeExperiment {
     echo "  Launch ${NBNODE} new peers"
     cd $SLOTH_HOME
     if [ "$INJECTION_MODE" != "in_vivo" ]; then 
+       echo "./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID --no-stabilization"
        ./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID --no-stabilization 
     else
+       echo "./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID"
        ./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID
     fi
     
