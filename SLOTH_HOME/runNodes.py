@@ -46,7 +46,9 @@ def main():
     #print flags
     
     # Copy the known address file 
-    cp = TaktukPut(hosts, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
+    filtered_hosts=list(set(hosts))
+    print 'copy %s on %s' % (args.nodes_address_file, filtered_hosts)
+    cp = TaktukPut(filtered_hosts, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
     cmd = 'rm /tmp/sloth_launcher*; cd '+os.environ["SLOTH_HOME"]+' ; ./startNode.sh '+args.dataMode+' {{[akkaport for akkaport in akkaports]}} '+str(args.experimentId)+' --mode '+args.dataMode+' --port {{[akkaport for akkaport in akkaports]}} --http-port {{[httpport for httpport in httpports]}} {{[flag for flag in flags]}} '+otherFlags +' 2>&1 >/tmp/sloth_launcher_{{[akkaport for akkaport in akkaports]}}.log 0<&- 2>&- &'
     print cmd
