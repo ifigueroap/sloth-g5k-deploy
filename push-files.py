@@ -23,7 +23,7 @@ def main():
     hosts  = [s.strip().split(':')[0] for s in nodesInfos]
     frontends = list(set([str('frontend.'+get_host_site(h)) for h in hosts]))
     
-    ## We must also put the DHT-EXP hierarchy into the service node
+    ## Also put files into the service node
     frontends.append(args.service_node)
 
     ## Remove the old DHT-EXP hierarchy 
