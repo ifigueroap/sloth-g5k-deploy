@@ -53,4 +53,6 @@ export INJECTOR_HOME=~/DHT-EXP/INJECTOR_HOME
 push-files.py --nodes-address-file ./peers.list
 ## Each time you want to kill the sloth peers you should invoke the killNodes.py script
 ./SLOTH_HOME/killNodes.py --nodes-address-file peers.list
-
+## To collect the log files you should use ./get-results.py
+## ./get-results.py -f addresses_node_file -s service_node -e experimentID
+./get-results.py -f peers.list -s parapide-4.rennes.grid5000.fr -e 20235
