@@ -67,11 +67,10 @@ function executeExperiment {
 }
 
 echo "Executing Eager Experiment"
-#executeExperiment eager > $INJECTOR_HOME/INJECTOR_${EXPERIMENTID}_EAGER.log
 executeExperiment eager 
 
-# echo "Executing Lazy Experiment"
-#executeExperiment lazy > $INJECTOR_HOME/INJECTOR_${EXPERIMENTID}_LAZY.log
+echo "Executing Lazy Experiment"
+executeExperiment lazy
 
 # echo "Processing logs and creating ECDF plots"
 # #Process logs and create ECDF plots
