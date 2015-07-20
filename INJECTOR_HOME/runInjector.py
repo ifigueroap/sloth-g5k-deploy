@@ -40,18 +40,27 @@ def main():
 
     injectorLogFileBase = 'injectorLog_' + str(args.experimentId)
     injectorLogFile = injectorLogFileBase + '.csv'
+    checkFile = 'summary-' + str(args.experimentId) + '-' + str(args.dataMode) + '.log'
+    dhtLogFile = 'dhtinjector-log-'+str(args.experimentId)+'-'+str(args.dataMode)+'.log'
+    failuresFile = 'failures-'+str(args.experimentId)+'-'+str(args.dataMode)+'.log'
 
-    cmd = 'cd '+os.environ["INJECTOR_HOME"]+';'\
-    'cp ./config/injector.properties ./config/injector.properties.orig;'\
-    'sed "s/peers.number.*/peers.number ='+str(args.nbNodes)+'/g" ./config/injector.properties > /tmp/injector.properties;'\
-    'cp /tmp/injector.properties ./config/injector.properties;'\
-    'sed "s/injection.mode.*/injection.mode = in_vivo/g" ./config/injector.properties > /tmp/injector.properties;'\
-    'cp /tmp/injector.properties ./config/injector.properties;'\
-    'sed "s:dht.nodesaddress.*:dht.nodesaddress = "'+args.nodes_address_file+'":g" ./config/injector.properties > /tmp/injector.properties;'\
-    'cp /tmp/injector.properties ./config/injector.properties;'\
-    'java -jar target/scala-2.10/dhtinjector.jar 2>&1 > ./dhtinjector-log-'+str(args.experimentId)+'-'+str(args.dataMode)+'.log 0<&- 2>&-'
-    'mv ./injectorLog.csv ' + injectorLogFile + ';' \
-    './querycsv.py -i ' + injectorLogFile + ' -o failures_' +str(args.experimentId)+'.csv "SELECT * FROM ' + injectorLogFileBase + ' WHERE status == \\\"FAILURE\\\""'
+    cmd = '; '.join([
+       'cd '+ os.environ["INJECTOR_HOME"]
+      ,'cp ./config/injector.properties ./config/injector.properties.orig'
+      ,'sed "s/peers.number.*/peers.number =' + str(args.nbNodes) + '/g" ./config/injector.properties > /tmp/injector.properties'
+      ,'cp /tmp/injector.properties ./config/injector.properties'
+      ,'sed "s/injection.mode.*/injection.mode = in_vivo/g" ./config/injector.properties > /tmp/injector.properties'
+      ,'cp /tmp/injector.properties ./config/injector.properties'
+      ,'sed "s:dht.nodesaddress.*:dht.nodesaddress = "'+args.nodes_address_file+'":g" ./config/injector.properties > /tmp/injector.properties'
+      ,'cp /tmp/injector.properties ./config/injector.properties'
+      ,'java -jar target/scala-2.10/dhtinjector.jar 2>&1 > ' + dhtLogFile + ' 0<&- 2>&-'
+      ,'mv ./injectorLog.csv ' + injectorLogFile
+      ,'./querycsv.py -i '+injectorLogFile+' -o '+failuresFile+' "SELECT * FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\""'
+      ,'tail -n 6 '+dhtLogFile+' > '+checkFile
+      ,'./querycsv.py -i '+injectorLogFile+' "SELECT COUNT(*) AS total_failures FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\"" >> '+checkFile 
+      ,'./querycsv.py -i '+injectorLogFile+' "SELECT COUNT(*) AS get_failures FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\" and operation == \\\"Get()\\\"">> '+checkFile
+      ,'./querycsv.py -i '+injectorLogFile+' "SELECT COUNT(*) AS put_failures FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\" and operation == \\\"Put()\\\"">> '+checkFile
+    ])
     print service_node +'/'+ cmd
     
     launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': str(os.getlogin())}).run()
