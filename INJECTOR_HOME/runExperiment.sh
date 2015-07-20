@@ -49,9 +49,10 @@ function executeExperiment {
     cd $INJECTOR_HOME
     ./runInjector.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE
 
-     echo "####### SUMMARY #######"
-     cat "summary-$EXPERIMENTID-$MODE.log"
-     echo "#######################"
+     ## Doesn't work because the file is in the service node
+     # echo "####### SUMMARY #######"
+     # cat "./summary-$EXPERIMENTID-$MODE.log"
+     # echo "#######################"
      
 #    echo "Killing peers"
 #    cd $SLOTH_HOME
