@@ -37,6 +37,9 @@ def main():
     cmd = 'pkill -9 -f dhtinjector.jar'
     launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': str(os.getlogin())}).run()
 
+    injectorLogFileBase = 'injectorLog_' + str(args.experimentId)
+    injectorLogFile = injectorLogFileBase + '.csv'
+
     cmd = 'cd '+os.environ["INJECTOR_HOME"]+';'\
     'cp ./config/injector.properties ./config/injector.properties.orig;'\
     'sed "s/peers.number.*/peers.number ='+str(args.nbNodes)+'/g" ./config/injector.properties > /tmp/injector.properties;'\
@@ -45,7 +48,9 @@ def main():
     'cp /tmp/injector.properties ./config/injector.properties;'\
     'sed "s:dht.nodesaddress.*:dht.nodesaddress = "'+args.nodes_address_file+'":g" ./config/injector.properties > /tmp/injector.properties;'\
     'cp /tmp/injector.properties ./config/injector.properties;'\
-    'java -jar target/scala-2.10/dhtinjector.jar 2>&1 > ./dhtinjector-log-'+str(args.experimentId)+'.log 0<&- 2>&-'
+    'java -jar target/scala-2.10/dhtinjector.jar 2>&1 > ./dhtinjector-log-'+str(args.experimentId)+'.log 0<&- 2>&- ;'\
+    'mv ./injectorLog.csv ' + injectorLogFile + ';' \
+    './querycsv.py -i ' + injectorLogFile + ' -o failures_' +str(args.experimentId)+'.csv "SELECT * FROM ' + injectorLogFileBase + ' WHERE status == \\\"FAILURE\\\""'
     print service_node +'/'+ cmd
     
     launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': str(os.getlogin())}).run()
