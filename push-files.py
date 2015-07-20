@@ -21,9 +21,9 @@ def main():
        sys.exit()
     
     hosts  = [s.strip().split(':')[0] for s in nodesInfos]
+    hosts.append(args.service_node)
     frontends = list(set([str('frontend.'+get_host_site(h)) for h in hosts]))
     
-    frontends.append(args.service_node)
 
     ## Remove the old DHT-EXP hierarchy 
     logger.info('Remove old files on each NFS server involved in the experiment ('+str(frontends)+')')

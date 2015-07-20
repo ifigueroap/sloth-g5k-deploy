@@ -16,5 +16,5 @@ args = parser.parse_args()
 hosts = [line.strip().split(':')[0] for line in open(args.nodes_address_file)]
 
 logger.info('kill java sloth peers')
-TaktukRemote('pkill -9 -f sloth.jar', hosts).run()
+TaktukRemote('pkill -9 -f sloth.jar ; rm /tmp/sloth_launcher*', hosts).run()
 

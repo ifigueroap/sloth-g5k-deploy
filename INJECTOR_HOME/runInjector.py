@@ -8,6 +8,7 @@ from execo import TaktukRemote, TaktukPut
 
 parser = argparse.ArgumentParser(description="Run the Sloth Injector")
 parser.add_argument('nbNodes', type=int, metavar="N", help="Number of nodes")
+parser.add_argument('dataMode', metavar="M", help="Data Mode = eager | lazy")
 parser.add_argument('--experimentId', type=int, metavar="E", help="Experiment id (default = 0)", default = 0, required=False)
 parser.add_argument('--nodes_address_file', help="Absolute pathname to the file indicating the peer addresses", required=True, metavar="F", default = "./configuration/nodes_address.txt")
 parser.add_argument('-s', '--service_node', help="name of the node where the injector will be executed", required=True)
@@ -34,7 +35,7 @@ def main():
     
     cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
-    cmd = 'pkill -9 -f dhtinjector.jar'
+    cmd = 'pkill -9 -f dhtinjector.jar ; rm -rf ~/DHT-EXP/INJECTOR_HOME/dhtinjector-log-*'
     launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': str(os.getlogin())}).run()
 
     injectorLogFileBase = 'injectorLog_' + str(args.experimentId)
@@ -48,7 +49,7 @@ def main():
     'cp /tmp/injector.properties ./config/injector.properties;'\
     'sed "s:dht.nodesaddress.*:dht.nodesaddress = "'+args.nodes_address_file+'":g" ./config/injector.properties > /tmp/injector.properties;'\
     'cp /tmp/injector.properties ./config/injector.properties;'\
-    'java -jar target/scala-2.10/dhtinjector.jar 2>&1 > ./dhtinjector-log-'+str(args.experimentId)+'.log 0<&- 2>&- ;'\
+    'java -jar target/scala-2.10/dhtinjector.jar 2>&1 > ./dhtinjector-log-'+str(args.experimentId)+'-'+str(args.dataMode)+'.log 0<&- 2>&-'
     'mv ./injectorLog.csv ' + injectorLogFile + ';' \
     './querycsv.py -i ' + injectorLogFile + ' -o failures_' +str(args.experimentId)+'.csv "SELECT * FROM ' + injectorLogFileBase + ' WHERE status == \\\"FAILURE\\\""'
     print service_node +'/'+ cmd

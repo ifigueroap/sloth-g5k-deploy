@@ -47,7 +47,7 @@ function executeExperiment {
 
     echo "  Start the injection phase"
     cd $INJECTOR_HOME
-    ./runInjector.py $NBNODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE
+    ./runInjector.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE
    
 #    echo "Killing peers"
 #    cd $SLOTH_HOME
