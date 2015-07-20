@@ -49,21 +49,9 @@ function executeExperiment {
     cd $INJECTOR_HOME
     ./runInjector.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE
 
-     ## Doesn't work because the file is in the service node
-     # echo "####### SUMMARY #######"
-     # cat "./summary-$EXPERIMENTID-$MODE.log"
-     # echo "#######################"
-     
 #    echo "Killing peers"
 #    cd $SLOTH_HOME
 #    ./killNodes.py --nodes_address_file $NODEFILE
-#
-
-    # Consolidate log files
-    #echo "Consolidating log files"
-    #LOGPATH=$SLOTH_HOME/log/$EXPERIMENTID/$MODE    
-    #cat $LOGPATH/analytics-node-* | sort -k1 > $LOGPATH/analytics.log
-    #cat $LOGPATH/node-* | sort -k1 > $LOGPATH/app.log    
 }
 
 echo "Executing Eager Experiment"
