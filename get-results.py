@@ -45,7 +45,7 @@ def main():
     
     ## Get Injector logs 
     logger.info('get log files of the injector ('+str(args.service_node)+')')
-    remote_files=[''/home/'+str(whoami)+'/DHT-EXP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'_eager.log', /home/'+str(whoami)+'/DHT-EXP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'_lazy.log'], 
+    remote_files=[''/home/'+str(whoami)+'/DHT-EXP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-eager.log', /home/'+str(whoami)+'/DHT-EXP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-lazy.log'], 
 
     test = TaktukGet(str(args.service_node), remote_files, os.getcwd()+'/'+str(args.experiment_id)+'/.', connection_params={'user': str(whoami)}).run()
     ## CP peers.list

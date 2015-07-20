@@ -35,7 +35,7 @@ def main():
     
     cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
-    cmd = 'pkill -9 -f dhtinjector.jar'
+    cmd = 'pkill -9 -f dhtinjector.jar ; rm -rf ~/DHT-EXP/INJECTOR_HOME/dhtinjector-log-*'
     launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': str(os.getlogin())}).run()
 
     cmd = 'cd '+os.environ["INJECTOR_HOME"]+';'\
