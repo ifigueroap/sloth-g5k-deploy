@@ -34,15 +34,20 @@ def main():
     logger.info('get log files from each NFS server involved in the experiment (frontends:'+str(frontends)+', log files:'+str(remote_files)+')')
     test = Get(frontends, remote_files, os.getcwd()+'/'+str(args.experiment_id)+'/.' ,connection_params={'user': str(whoami)}).run()
 
-    remote_files=['/tmp/sloth_launcher*']
+    ## Get tmp logs
+    # Please note that taktukGet does not allow us to use '*' characters. 
+    # Get provides such a feature but Get is not scalable enough (i.e. cannot go beyond 250 peers)
+    # When will we reach such a scale, we will have to use a local tar and scp to lyon (see commented line below) 
+    remote_files=['/tmp/sloth_launcher']
     logger.info('get log files from each host (i.e. tmp files)')
     test = Get(hosts, remote_files, os.getcwd()+'/'+str(args.experiment_id)+'/.' ,connection_params={'user': str(whoami)}).run()
-
+    #cmd = 'tar czf tmp_{{{host}}}.log /tmp/sloth_launcher* ; scp /tmp_{{{host}}}.log frontend.lyon:./DHT-EXP/'+str(arg.experiment_id)+'/.'
+    
     ## Get Injector logs 
     logger.info('get log files of the injector ('+str(args.service_node)+')')
-    whoami=os.getlogin()
-    test = TaktukGet(str(args.service_node), ['/home/'+str(whoami)+'/DHT-EXP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'.log'], os.getcwd()+'/'+str(args.experiment_id)+'/.', connection_params={'user': str(whoami)}).run()
+    remote_files=[''/home/'+str(whoami)+'/DHT-EXP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'_eager.log', /home/'+str(whoami)+'/DHT-EXP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'_lazy.log'], 
 
+    test = TaktukGet(str(args.service_node), remote_files, os.getcwd()+'/'+str(args.experiment_id)+'/.', connection_params={'user': str(whoami)}).run()
     ## CP peers.list
     logger.info('cp peers list')
     os.system('cp '+args.nodes_address_file+' ./'+args.experiment_id+'/.') 

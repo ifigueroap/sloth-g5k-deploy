@@ -50,7 +50,7 @@ def main():
     print 'copy %s on %s' % (args.nodes_address_file, filtered_hosts)
     cp = TaktukPut(filtered_hosts, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
-    cmd = 'rm /tmp/sloth_launcher*; cd '+os.environ["SLOTH_HOME"]+' ; ./startNode.sh '+args.dataMode+' {{[akkaport for akkaport in akkaports]}} '+str(args.experimentId)+' --mode '+args.dataMode+' --port {{[akkaport for akkaport in akkaports]}} --http-port {{[httpport for httpport in httpports]}} {{[flag for flag in flags]}} '+otherFlags +' 2>&1 >/tmp/sloth_launcher_{{[akkaport for akkaport in akkaports]}}.log 0<&- 2>&- &'
+    cmd = 'rm /tmp/sloth_launcher*; cd '+os.environ["SLOTH_HOME"]+' ; ./startNode.sh '+args.dataMode+' {{[akkaport for akkaport in akkaports]}} '+str(args.experimentId)+' --mode '+args.dataMode+' --port {{[akkaport for akkaport in akkaports]}} --http-port {{[httpport for httpport in httpports]}} {{[flag for flag in flags]}} '+otherFlags +' 2>&1 >/tmp/sloth_launcher_{{[akkaport for akkaport in akkaports]}}_'+args.dataMode+'.log 0<&- 2>&- &'
     print cmd
     launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': str(os.getlogin())}).run()
     print "Peers have been launched." 
