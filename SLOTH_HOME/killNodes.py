@@ -18,5 +18,5 @@ hosts = list(set([line.strip().split(':')[0] for line in open(args.nodes_address
 print "Killing hosts" + str(hosts)
 
 logger.info('kill java sloth peers')
-TaktukRemote('pkill -9 -f sloth.jar ; rm /tmp/sloth_launcher*', hosts).run()
+TaktukRemote('pkill -9 -f sloth.jar ', hosts).run()
 

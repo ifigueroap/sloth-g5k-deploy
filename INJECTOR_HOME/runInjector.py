@@ -4,7 +4,7 @@ import os
 import subprocess
 import time
 import argparse
-from execo import TaktukRemote, TaktukPut
+from execo import Remote, TaktukPut
 
 parser = argparse.ArgumentParser(description="Run the Sloth Injector")
 parser.add_argument('nbNodes', type=int, metavar="N", help="Number of nodes")
@@ -12,12 +12,21 @@ parser.add_argument('dataMode', metavar="M", help="Data Mode = eager | lazy")
 parser.add_argument('--experimentId', type=int, metavar="E", help="Experiment id (default = 0)", default = 0, required=False)
 parser.add_argument('--nodes_address_file', help="Absolute pathname to the file indicating the peer addresses", required=True, metavar="F", default = "./configuration/nodes_address.txt")
 parser.add_argument('-s', '--service_node', help="name of the node where the injector will be executed", required=True)
+parser.add_argument('-u', '--user', help="login of the user launching the script")
 
 def main():
 
     args = parser.parse_args()
 
-    # Retrieve the right number of lines
+    login=''
+    try: 
+        login=os.getlogin()
+    except OSError:
+        login=args.user
+    ## TODO make it more robust, if arg.user is empty  
+
+
+   # Retrieve the right number of lines
     try:
         nodesFile = open(args.nodes_address_file)
         nodesInfos = [next(nodesFile) for x in range(args.nbNodes)]
@@ -32,11 +41,12 @@ def main():
     hosts  = [s.strip().split(':')[0] for s in nodesInfos]
     
     service_node = str(args.service_node)
-    
+    #print 'file:'+str(args.nodes_address_file) 
     cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
     cmd = 'pkill -9 -f dhtinjector.jar ; rm -rf ~/DHT-EXP/INJECTOR_HOME/dhtinjector-log-*'
-    launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': str(os.getlogin())}).run()
+    #print cmd+'(with user:'+login+')'
+    launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()
 
     injectorLogFileBase = 'injectorLog_' + str(args.experimentId)
     injectorLogFile = injectorLogFileBase + '.csv'
@@ -63,7 +73,7 @@ def main():
     ])
     print service_node +'/'+ cmd
     
-    launch_sloths = TaktukRemote(cmd,service_node, connection_params={'user': str(os.getlogin())}).run()
+    launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()
     print "The injector has been launched." 
 
 if __name__ == "__main__":

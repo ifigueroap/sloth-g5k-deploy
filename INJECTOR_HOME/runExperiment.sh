@@ -30,7 +30,7 @@ function executeExperiment {
     cd $SLOTH_HOME
     ./killNodes.py --nodes_address_file $NODEFILE
     
-    echo "  Launch ${NBNODE} new peers"
+   echo "  Launch ${NBNODE} new peers"
     cd $SLOTH_HOME
     if [ "$INJECTION_MODE" != "in_vivo" ]; then 
        echo "./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID --no-stabilization"
@@ -45,11 +45,12 @@ function executeExperiment {
     echo "  Please check that peers are online"
     #sleep 60 
 
-    echo "  Start the injection phase"
+    echo "  Start the injection phase (with user: $USER)"
     cd $INJECTOR_HOME
-    ./runInjector.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE
+    ./runInjector.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE --user $USER 
 
-#    echo "Killing peers"
+ 
+    #    echo "Killing peers"
 #    cd $SLOTH_HOME
 #    ./killNodes.py --nodes_address_file $NODEFILE
 }
@@ -57,8 +58,8 @@ function executeExperiment {
 echo "Executing Eager Experiment"
 executeExperiment eager 
 
-echo "Executing Lazy Experiment"
-executeExperiment lazy
+#echo "Executing Lazy Experiment"
+#executeExperiment lazy
 
 # echo "Processing logs and creating ECDF plots"
 # #Process logs and create ECDF plots
