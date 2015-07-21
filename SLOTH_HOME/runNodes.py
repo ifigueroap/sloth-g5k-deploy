@@ -20,7 +20,8 @@ def main():
     otherFlags="--known-nodes-file "+args.nodes_address_file
     if args.no_stabilization:
         otherFlags += " --no-stabilization"
-    
+   
+    login=str(os.getlogin()) 
 
     # Retrieve the right number of lines
     try:
@@ -52,8 +53,8 @@ def main():
     cp = TaktukPut(filtered_hosts, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
     cmd = 'rm -rf /tmp/sloth ; mkdir /tmp/sloth ; cd '+os.environ["SLOTH_HOME"]+' ; sleep {{[delay for delay in delays]}} ; ./startNode.sh '+args.dataMode+' {{[akkaport for akkaport in akkaports]}} '+str(args.experimentId)+' --mode '+args.dataMode+' --port {{[akkaport for akkaport in akkaports]}} --http-port {{[httpport for httpport in httpports]}} {{[flag for flag in flags]}} '+otherFlags +' 2>&1 >/tmp/sloth/sloth_launcher_{{[akkaport for akkaport in akkaports]}}_'+args.dataMode+'.log 0<&- 2>&- &'
-    print cmd
-    launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': str(os.getlogin())}).run()
+    print cmd+':'+login
+    launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': login}).run()
     print "Peers have been launched." 
 
 if __name__ == "__main__":
