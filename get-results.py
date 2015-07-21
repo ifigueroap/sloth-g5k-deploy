@@ -39,7 +39,9 @@ def main():
     Get(hosts_filtered, ['/tmp/{{{host}}}.tgz'],results_path,  connection_params={'user': str(whoami)}).run()
     logger.info('Extract the archives')
     for host in hosts_filtered:
-        os.system('tar xzf '+results_path+host+'.tgz -C '+results_path)
+        cmd = 'tar xzf '+results_path+host+'.tgz -C '+results_path +' --strip=3'
+        print cmd
+        os.system(cmd)
 
     ## Get Injector logs 
     logger.info('get log files of the injector ('+str(args.service_node)+')')
