@@ -40,10 +40,10 @@ def main():
 
     ## Install missing packages
     logger.info('| - Install Packages')   
-    install_packages = TaktukRemote('export DEBIAN_MASTER=noninteractive ;  export https_proxy="https://proxy:3128"; apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y --force-yes python-pip lynx openjdk-7-jdk uuid-runtime cpufrequtils kanif -o Acquire::Check-Valid-Until=false -o Dpkgtions::="--force-confdef" -o Dpkgtions::="--force-confold"', nodes).run()
+    install_packages = TaktukRemote('export DEBIAN_MASTER=noninteractive ;  export https_proxy="https://proxy:3128"; apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y --force-yes python-pip lynx openjdk-7-jdk uuid-runtime cpufrequtils kanif -o Acquire::Check-Valid-Until=false -o Dpkgtions::="--force-confdef" -o Dpkgtions::="--force-confold" ; pip install tabview', nodes).run()
     ## Fix ulimit and related stuffs
     logger.info('| - set limit related stuffs')
-    cmd = 'ulimit -c unlimited; sysctl -w vm.max_map_count=331072 ; echo 120000 > /proc/sys/kernel/threads-max ; echo 600000 > /proc/sys/vm/max_map_count ; echo 200000 > /proc/sys/kernel/pid_max; pip install tabview;' 
+    cmd = 'ulimit -c unlimited; sysctl -w vm.max_map_count=331072 ; echo 120000 > /proc/sys/kernel/threads-max ; echo 600000 > /proc/sys/vm/max_map_count ; echo 200000 > /proc/sys/kernel/pid_max' 
     TaktukRemote(cmd, nodes).run()
 
     ## Copy the DHT-EXP hierarchy to the remote site
@@ -54,12 +54,15 @@ def main():
     ## Prepare the address file for the sloth peers (please remind that the last node is dedicated for the injector
     logger.info('Prepare the peers list')
     i = 0 
-    f = open('./peers.list', 'w')
+    f1 = open('./hosts.list', 'w')
+    f2 = open('./peers.list', 'w')
     for node in nodes[:-1]:
+        f1.write("%s\n" % (node.address))
         for cores in range(get_host_attributes(node)['architecture']['smt_size']):
-            f.write("%s:%d:%d\n" % (node.address, 3000+i, 8000+i))
+            f2.write("%s:%d:%d\n" % (node.address, 3000+i, 8000+i))
             i = i+1 
-    f.close()
+    f1.close()
+    f2.close()
      
     print "Nodes are now ready, you should launch ./INJECTOR_HOME/runExperiment.sh ... from the lyon frontend"
     print "The list of sloth peers is in ./peers.list"
