@@ -1,11 +1,11 @@
 This is a stupid readme file to book nodes and make experiments on Grid'5000. 
 The README has been written considering you are connected to the Lyon frontend
-inside the DHT-EXP.  
-!!!!!!
-WARNING: THE CURRENT SCRIPTS ARE NOT ROBUST ENOUGH TO DEPLOY ON LYON' NODES,
-INDEED IT DELETES THE DHT-EXP ON THE EACH NFS SERVER THAT IS INVOLVED IN THE
-EXPERIMENT. 
-!!!!!!!
+inside the sloth-g5k-deploy. 
+## ###
+#Get the code on the lyon frontend: 
+export https_proxy="http://proxy.lyon.grid5000.fr:3128" 
+git clone https://github.com/ifigueroap/sloth-g5k-deploy.git
+cd sloth-g5k-deploy
 
 ## ####
 ## First step - book some nodes with the funk command, for instance the following invokation
