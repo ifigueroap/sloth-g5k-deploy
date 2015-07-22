@@ -68,10 +68,10 @@ def main():
                    remote_location=str(args.nodes_address_file)).run()
 
     cmd = 'rm -rf /tmp/sloth ; mkdir -p /tmp/sloth/' + str(args.experimentId) \
-        + ' ; cd ~/SLOTH-HOME-TMP/SLOTH_HOME; sleep {{delays}} ; ' + \
+        + ' ; cd ~/SLOTH-EXP-TMP/SLOTH_HOME; sleep {{delays}} ; ' + \
         './startNode.sh ' + args.dataMode + ' {{akkaports}} ' + \
         str(args.experimentId) + ' --mode ' + args.dataMode + \
-        ' --port {{[akkaport for akkaport in akkaports]}} ' +\
+        ' --port {{akkaports}} ' +\
         '--http-port {{httpports}} {{flags}} ' + otherFlags + \
         ' 2>&1 > /tmp/sloth/' + str(args.experimentId) + \
         '/sloth_launcher_{{akkaports}}_' + args.dataMode + '.log 0<&- 2>&- &'
