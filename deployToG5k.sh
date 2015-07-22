@@ -19,9 +19,6 @@ git add .
 git commit -m "New release of Sloth / Injector"
 git push
 
-echo "rsyncing to g5k:lyon/DHT-EXP..."
-rsync -avrzd -e ssh --progress --exclude-from rsync-exclude . g5k:lyon/DHT-EXP
-
 echo "Done!"
 
 
