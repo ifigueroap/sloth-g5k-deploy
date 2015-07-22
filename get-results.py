@@ -26,7 +26,7 @@ def main():
     frontends = list(set([str('frontend.'+get_host_site(h)) for h in hosts]))
 
     #Create local direction
-    results_path='~/DHT-EXP-RESULTS/'+str(args.experiment_id)+'/'
+    results_path='~/SLOTH-EXP-RESULTS/'+str(args.experiment_id)+'/'
     os.system('mkdir -p '+results_path)
 
     whoami=os.getlogin()
@@ -45,7 +45,7 @@ def main():
 
     ## Get Injector logs 
     logger.info('get log files of the injector ('+str(args.service_node)+')')
-    remote_files=['/home/'+str(whoami)+'/DHT-EXP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-eager.log', '/home/'+str(whoami)+'/DHT-EXP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-lazy.log'] 
+    remote_files=['/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-eager.log', '/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-lazy.log'] 
 
     test = Get(str(args.service_node), remote_files, results_path, connection_params={'user': str(whoami)}).run()
  
@@ -54,8 +54,4 @@ def main():
     os.system('cp '+args.nodes_address_file+' '+results_path) 
  
 if __name__ == "__main__":
-    try: 
-        os.environ["SLOTH_HOME"]
-    except KeyError: 
-        sys.exit("Please set the SLOTH_HOME env variable")
     main()
