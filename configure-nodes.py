@@ -64,10 +64,15 @@ def main():
     
     f1 = open('./hosts.info', 'w')
     f2 = open('./peers.info', 'w')
-    for i, node in enumerate(nodes[:-1]):
+
+    logger.info('enumerate %s', enumerate(nodes[:-1]))
+
+    i = 0
+    for j, node in enumerate(nodes[:-1]):
         f1.write("%s\n" % (node.address))
         for cores in range(get_host_attributes(node)['architecture']['smt_size']):
             f2.write("%s:%d:%d\n" % (node.address, 3000 + i, 8000 + i))
+            i = i + 1
     f1.close()
     f2.close()
 
