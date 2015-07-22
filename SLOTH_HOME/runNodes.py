@@ -52,14 +52,10 @@ def main():
     print 'copy %s on %s' % (args.nodes_address_file, filtered_hosts)
     cp = TaktukPut(filtered_hosts, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
-    cmd = 'rm -rf /tmp/sloth ; mkdir -p /tmp/sloth/'+str(args.experimentId)+' ; cd '+os.environ["SLOTH_HOME"]+' ; sleep {{[delay for delay in delays]}} ; ./startNode.sh '+args.dataMode+' {{[akkaport for akkaport in akkaports]}} '+str(args.experimentId)+' --mode '+args.dataMode+' --port {{[akkaport for akkaport in akkaports]}} --http-port {{[httpport for httpport in httpports]}} {{[flag for flag in flags]}} '+otherFlags +' 2>&1 >/tmp/sloth/'+str(args.experimentId)+'/sloth_launcher_{{[akkaport for akkaport in akkaports]}}_'+args.dataMode+'.log 0<&- 2>&- &'
+    cmd = 'rm -rf /tmp/sloth ; mkdir -p /tmp/sloth/'+str(args.experimentId)+' ; cd ~/SLOTH-HOME-TMP/SLOTH_HOME; sleep {{[delay for delay in delays]}} ; ./startNode.sh '+args.dataMode+' {{[akkaport for akkaport in akkaports]}} '+str(args.experimentId)+' --mode '+args.dataMode+' --port {{[akkaport for akkaport in akkaports]}} --http-port {{[httpport for httpport in httpports]}} {{[flag for flag in flags]}} '+otherFlags +' 2>&1 >/tmp/sloth/'+str(args.experimentId)+'/sloth_launcher_{{[akkaport for akkaport in akkaports]}}_'+args.dataMode+'.log 0<&- 2>&- &'
     print cmd+':'+login
     launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': login}).run()
     print "Peers have been launched." 
 
 if __name__ == "__main__":
-    try: 
-        os.environ["SLOTH_HOME"]
-    except KeyError: 
-        sys.exit("Please set the SLOTH_HOME env variable")
     main()

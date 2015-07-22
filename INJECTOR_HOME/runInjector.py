@@ -44,7 +44,7 @@ def main():
     #print 'file:'+str(args.nodes_address_file) 
     cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
-    cmd = 'pkill -9 -f dhtinjector.jar ; rm -rf ~/DHT-EXP/INJECTOR_HOME/dhtinjector-log-*'
+    cmd = 'pkill -9 -f dhtinjector.jar ; rm -rf ~/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-*'
     #print cmd+'(with user:'+login+')'
     launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()
 
@@ -55,7 +55,7 @@ def main():
     failuresFile = 'failures-'+str(args.experimentId)+'-'+str(args.dataMode)+'.log'
 
     cmd = '; '.join([
-       'cd '+ os.environ["INJECTOR_HOME"]
+       'cd ~/SLOTH-EXP-TMP/INJECTOR_HOME/.'
       ,'cp ./config/injector.properties ./config/injector.properties.orig'
       ,'sed "s/peers.number.*/peers.number =' + str(args.nbNodes) + '/g" ./config/injector.properties > /tmp/injector.properties'
       ,'cp /tmp/injector.properties ./config/injector.properties'
