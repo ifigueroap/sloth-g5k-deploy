@@ -55,6 +55,7 @@ def main():
     TaktukPut(frontends, ['./SLOTH_HOME' ],'./SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
     TaktukPut(frontends, ['./INJECTOR_HOME' ], './SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
 
+
     ## Prepare the address file for the sloth peers (please remind that the last node is dedicated for the injector
     logger.info('Prepare the peers list')
     
