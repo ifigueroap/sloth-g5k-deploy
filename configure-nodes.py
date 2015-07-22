@@ -59,8 +59,8 @@ def main():
     ## Prepare the address file for the sloth peers (please remind that the last node is dedicated for the injector
     logger.info('Prepare the peers list')
     
-    f1 = open('./hosts.list', 'w')
-    f2 = open('./peers.list', 'w')
+    f1 = open('./hosts.info', 'w')
+    f2 = open('./peers.info', 'w')
     for i, node in enumerate(nodes[:-1]):
         f1.write("%s\n" % (node.address))
         for cores in range(get_host_attributes(node)['architecture']['smt_size']):
@@ -68,10 +68,16 @@ def main():
     f1.close()
     f2.close()
 
+    f = open('./service_node.info')
+    f.write("The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.info %s" % (i,os.getcwd(),nodes[-1].address)) 
+    f.close()
+    
     print "Nodes are now ready, you should launch ./INJECTOR_HOME/runExperiment.sh ... from the lyon frontend"
-    print "The list of sloth peers is in ./peers.list"
+    print "The list of sloth peers is in ./peers.info"
     print "The injector will run on %s" % nodes[-1].address
-    print "The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.list %s" % (i,os.getcwd(),nodes[-1].address) 
+    print "The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.info %s" % (i,os.getcwd(),nodes[-1].address) 
+
+  
  
 if __name__ == "__main__":
     main()
