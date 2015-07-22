@@ -12,7 +12,7 @@ cd sloth-g5k-deploy
 ## looks for 4 nodes on Nantes (econome) and 3 nodes on Rennes (Parapide cluster) for 6hours and 30 min
 ## with all mandatory actions to deploy/configure the nodes as you want. 
 
-funk -r econome:4,parapide:3 -m free -w 6:30:00 -k -o "-t deploy  -t allow_classic_ssh"
+funk -r econome:4,parapide:3 -m free -w 6:30:00 -o "-t deploy  -t allow_classic_ssh"
 
 ## note that funk is going to propose you to book the nodes but by default it does not. 
 ## Funk should return something like 
