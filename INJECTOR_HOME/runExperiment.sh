@@ -41,7 +41,11 @@ function executeExperiment {
        echo $PWD
        ./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID
     fi
-    
+   
+    if [ $? -ne 0 ] ; then
+       exit 1 
+    fi
+ 
     echo "  Please check that peers are online"
     #sleep 60 
 
