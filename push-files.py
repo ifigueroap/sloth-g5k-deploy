@@ -28,17 +28,18 @@ def main():
     ## Remove the old DHT-EXP hierarchy 
     logger.info('Remove old files on each NFS server involved in the experiment ('+str(frontends)+')')
     whoami=os.getlogin()
-    cmd = 'rm -rf home/'+str(whoami)+'/DHT-EXP' 
+    cmd = 'rm -rf ~/SLOTH-EXP-TMP' 
     TaktukRemote(cmd, frontends, connection_params={'user': str(whoami)}).run()
 
 
     ## Copy the DHT-EXP hierarchy to the remote site
     logger.info('Copy sloth and injector files on each NFS server involved in the experiment ('+str(frontends)+')')
-    test = TaktukPut(frontends, ['/home/'+str(whoami)+'/DHT-EXP' ], connection_params={'user': str(whoami)}).run()
+    TaktukRemote('mkdir ~/SLOTH-EXP-TMP/', frontends, connection_params={'user': str(whoami)}).run()
+    TaktukPut(frontends, ['./SLOTH_HOME' ],'~/SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
+
+
+    test = TaktukPut(frontends, ['' ], connection_params={'user': str(whoami)}).run()
  
 if __name__ == "__main__":
     try: 
-        os.environ["SLOTH_HOME"]
-    except KeyError: 
-        sys.exit("Please set the SLOTH_HOME env variable")
     main()
