@@ -35,8 +35,8 @@ def main():
     ## Copy the DHT-EXP hierarchy to the remote site
     logger.info('Copy sloth and injector files on each NFS server involved in the experiment ('+str(frontends)+')')
     TaktukRemote('mkdir ~/SLOTH-EXP-TMP/', frontends, connection_params={'user': str(whoami)}).run()
-    TaktukPut(frontends, ['SLOTH_HOME'],'~/SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
-    TaktukPut(frontends, ['INJECTOR_HOME'],'~/SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
+    TaktukPut(frontends, ['SLOTH_HOME'],'/home/'+str(os.getlogin())+'/SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
+    TaktukPut(frontends, ['INJECTOR_HOME'],'/home/'+str(os.getlogin())+'/SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
 
 
     test = TaktukPut(frontends, ['' ], connection_params={'user': str(whoami)}).run()
