@@ -78,7 +78,17 @@ def main():
     print cmd + ':' + login
     launch_sloths = TaktukRemote(cmd, hosts,
                                  connection_params={'user': login}).run()
-    print "Peers have been launched."
+    
+    p_nb=0; 
+    for peer in launch_sloths.processes: 
+        if not peer.ok:
+            print peer.host
+            print peer.stdout
+            print peer.stderr
+        else: 
+            p_nb= p_nb + 1
+
+    print "%d Peers have been launched" % (p_nb)
 
 
 if __name__ == "__main__":
