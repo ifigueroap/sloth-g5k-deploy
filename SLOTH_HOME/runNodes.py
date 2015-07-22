@@ -39,9 +39,9 @@ def main():
     akkaports = [s.strip().split(':')[1] for s in nodesInfos]
     httpports = [s.strip().split(':')[2] for s in nodesInfos]
     flags = ['-ifd'] + ['-fd'] * (args.nbNodes - 1)
-    delays = range(1, args.nbNodes)
-
-    print hosts[0]+' '+httpports[0]+' '+flags[0]+' file:'+args.nodes_address_file
+    delays = [float(x)/10 for x in range(0, args.nbNodes*3, 3)]
+   
+     print hosts[0]+' '+httpports[0]+' '+flags[0]+' file:'+args.nodes_address_file
     #print hosts
     #print akkaports
     #print httpports
