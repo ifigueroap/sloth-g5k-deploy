@@ -51,7 +51,10 @@ def main():
 
     ## Copy the DHT-EXP hierarchy to the remote site
     logger.info('Copy sloth and injector files on each NFS server involved in the experiment')
-    test = TaktukPut(frontends, ['../DHT-EXP' ], connection_params={'user': str(whoami)}).run()
+    TaktukRemote('mkdir ~/SLOTH-EXP-TMP/', frontends, connection_params={'user': str(whoami)}).run()
+).run()
+    TaktukPut(frontends, ['../sloth-g5k-deploy/SLOTH_HOME' ],'~/SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
+    TaktukPut(frontends, ['../sloth-g5k-deploy/INJECTOR_HOME' ], '~/SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
 
     ## Prepare the address file for the sloth peers (please remind that the last node is dedicated for the injector
     logger.info('Prepare the peers list')
@@ -72,8 +75,4 @@ def main():
     print "The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.list %s" % (i,os.getcwd(),nodes[-1].address) 
  
 if __name__ == "__main__":
-    try: 
-        os.environ["SLOTH_HOME"]
-    except KeyError: 
-        sys.exit("Please set the SLOTH_HOME env variable")
     main()
