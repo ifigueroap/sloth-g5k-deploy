@@ -4,7 +4,7 @@ from execo_g5k import *
 import os, sys, argparse
 from time import sleep 
 from execo.log import style
-from execo_g5k.utils import hosts_list
+#from execo_g5k.utils import hosts_list
 from execo_engine.utils import copy_outputs
 
 
@@ -14,7 +14,9 @@ parser.add_argument('-j', '--job_ids', nargs='+',  help="oar job id (site:jobid,
 def main():
     copy_outputs('config.log', 'config.log')
     args = parser.parse_args()
-    
+    whoami = os.getlogin()
+    logger.info('whoami: %s', whoami)   
+ 
     jobids = args.job_ids
     logger.info('Using jobs %s', style.emph(' '.join(args.job_ids)))
     
@@ -30,8 +32,9 @@ def main():
 
     logger.info("Get list of associated nodes")
     nodes = [ job_nodes for job in jobids_list for job_nodes in get_oar_job_nodes(*job) ]
-    logger.info('%s', hosts_list(nodes))
-
+ #   logger.info('%s', hosts_list(nodes))
+    logger.info('%s', nodes)
+ 
     logger.info("Deploying %i nodes" % (len(nodes),))
     deployed, undeployed = deploy(Deployment(nodes, env_name = "jessie-x64-nfs"))
     logger.info("%i deployed, %i undeployed" % (len(deployed), len(undeployed)))
@@ -51,7 +54,7 @@ def main():
 
     ## Copy the DHT-EXP hierarchy to the remote site
     logger.info('Copy sloth and injector files on each NFS server involved in the experiment')
-    TaktukRemote('mkdir ~/SLOTH-EXP-TMP/', frontends, connection_params={'user': str(whoami)}).run()
+    TaktukRemote('mkdir -p ~/SLOTH-EXP-TMP/', frontends, connection_params={'user': str(whoami)}).run()
     TaktukPut(frontends, ['./SLOTH_HOME' ],'./SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
     TaktukPut(frontends, ['./INJECTOR_HOME' ], './SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
 
@@ -68,7 +71,7 @@ def main():
     f1.close()
     f2.close()
 
-    f = open('./service_node.info')
+    f = open('./service_node.info', 'w')
     f.write("The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.info %s" % (i,os.getcwd(),nodes[-1].address)) 
     f.close()
     
