@@ -10,6 +10,9 @@ parser.add_argument('-j', '--job_ids', nargs='+',  help="oar job id (site:jobid,
 
 def main():
     args = parser.parse_args()
+    
+    whoami=os.getlogin()
+    
     jobids = args.job_ids
 
     print 'jobid is "', jobids
@@ -48,7 +51,6 @@ def main():
 
     ## Copy the DHT-EXP hierarchy to the remote site
     logger.info('Copy sloth and injector files on each NFS server involved in the experiment')
-    whoami=os.getlogin()
     test = TaktukPut(frontends, ['../DHT-EXP' ], connection_params={'user': str(whoami)}).run()
 
     ## Prepare the address file for the sloth peers (please remind that the last node is dedicated for the injector
