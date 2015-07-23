@@ -4,6 +4,7 @@ import os
 import subprocess
 import time
 import argparse
+import hashlib
 from execo import TaktukRemote, TaktukPut
 
 parser = argparse.ArgumentParser(description="Run Sloth DHT Nodes")
@@ -50,7 +51,21 @@ def main():
     akkaports = [s.strip().split(':')[1] for s in nodesInfos]
     httpports = [s.strip().split(':')[2] for s in nodesInfos]
     flags = ['-ifd'] + ['-fd'] * (args.nbNodes - 1)
-    delays = [float(x) / 10 for x in range(0, args.nbNodes * 2, 2)]
+    delays = [float(x) / 10 for x in range(0, args.nbNodes * 7, 7)]
+     
+    #@ Build delay according to the peer ID 
+    hp_shas = [((h+':'+p), int(hashlib.sha1(h+':'+p).hexdigest(),16)) for (h,p) in zip(hosts, akkaports)]
+    hp_shas.sort(key=lambda t: t[1])
+    print ([str(hp_sha) + '\n' for hp_sha in hp_shas])
+ 
+    sorted_peers = [h for (h,sha) in hp_shas ]
+    #positions = [sorted_peers.index(h+':'+p) for (h,p) in zip(hosts, akkaports)]
+    #print positions
+    delays = [sorted_peers.index(h+':'+p)*.3 for (h,p) in zip(hosts, akkaports)]
+    print delays
+    delays[0]=0
+
+#    sys.exit(-1) 
 
     print hosts[0] + ' ' + httpports[0] + ' ' + flags[0] + ' file:' + \
         args.nodes_address_file
