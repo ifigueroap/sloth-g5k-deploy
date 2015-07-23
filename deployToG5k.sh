@@ -5,14 +5,14 @@ THISDIR=$PWD
 echo "### sbt assembly SLOTH ###"
 cd $SLOTH_HOME_DEV
 sbt assembly 
-if [$? -ne 0]; then
+if [ $? -ne 0 ]; then
    exit 1
 fi
 
 echo "### sbt assembly INJECTOR ###"
 cd $INJECTOR_HOME_DEV
 sbt assembly
-if [$? -ne 0]; then
+if [ $? -ne 0 ]; then
   exit 1
 fi
 
