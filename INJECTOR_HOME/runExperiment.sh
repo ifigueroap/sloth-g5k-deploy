@@ -42,8 +42,8 @@ function executeExperiment {
        ./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID
     fi
     
-    echo "  Please check that peers are online"
-    #sleep 60 
+    echo "  Please wait 20 seconds that the ring becomes more stabilized"
+    sleep 20 
 
     echo "  Start the injection phase (with user: $USER)"
     cd $INJECTOR_HOME
