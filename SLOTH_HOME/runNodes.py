@@ -52,7 +52,7 @@ def main():
     akkaports = [s.strip().split(':')[1] for s in nodesInfos]
     httpports = [s.strip().split(':')[2] for s in nodesInfos]
     flags = ['-fd'] * args.nbNodes
-    delays = [float(x) / 10 for x in range(0, args.nbNodes * 7, 7)]
+    delays = [float(x) / 10 for x in range(0, args.nbNodes * 3, 3)]
      
     #@ Build delay according to the peer ID 
     hp_shas = [((h+':'+p), int(hashlib.sha1(h+':'+p).hexdigest(),16)) for (h,p) in zip(hosts, akkaports)]
