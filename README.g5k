@@ -34,17 +34,17 @@ funk -r econome:4,parapide:3 -m free -w 6:30:00 -o "-t deploy  -t allow_classic_
 ## It is noteworthy that the process is quite long (around 15/20 min) as the script redeploys the nodes and c
 ## install the missing debian package. 
 ## At the end of the script you should get something like : 
-## Nodes are now ready, you should launch ./INJECTOR_HOME/runExperiment.sh ... from the lyon frontend
+## Nodes are now ready, you should launch ./runExperiment.sh ... from the lyon frontend
 ## The list of sloth peers is in ./peers.list
 ## The injector will run on paravent-1.rennes.grid5000.fr
 ## /home/alebre/DHT-EXP
-## The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo 64 /home/alebre/DHT-EXP/peers.list paravent-1.rennes.grid5000.fr
+## The usual(max)  command should be : ./runExperiment.sh in_vivo 64 /home/alebre/DHT-EXP/peers.list paravent-1.rennes.grid5000.fr
 
 ## ####
 ## Third step -  Launch the experiment has proposed by the ./configure-nodes.py file
-export SLOTH_HOME=~/DHT-EXP/SLOTH_HOME
-export INJECTOR_HOME=~/DHT-EXP/INJECTOR_HOME
-./INJECTOR_HOME/runExperiment.sh in_vivo 64 /home/alebre/DHT-EXP/peers.list paravent-1.rennes.grid5000.fr
+export SLOTH_HOME=~/slot-g5k-deploy/SLOTH_HOME
+export INJECTOR_HOME=~/sloth-g5k-deploy/INJECTOR_HOME
+./runExperiment.sh in_vivo 64 /home/alebre/sloth-g5k-deploy/peers.list paravent-1.rennes.grid5000.fr
 
 ## ####
 ## OPTIONAL
