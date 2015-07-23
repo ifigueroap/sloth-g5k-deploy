@@ -50,7 +50,7 @@ def main():
     hosts = [s.strip().split(':')[0] for s in nodesInfos]
     akkaports = [s.strip().split(':')[1] for s in nodesInfos]
     httpports = [s.strip().split(':')[2] for s in nodesInfos]
-    flags = [['-fd'] * (args.nbNodes - 1)]
+    flags = ['-fd'] * args.nbNodes
     delays = [float(x) / 10 for x in range(0, args.nbNodes * 7, 7)]
      
     #@ Build delay according to the peer ID 
@@ -64,9 +64,10 @@ def main():
     delays = [sorted_peers.index(h+':'+p)*.5 for (h,p) in zip(hosts, akkaports)]
     print delays
     index = delays.index(0)
-    print index
+    print str(index) + ':'+str(len(flags))+':'+str(len(delays))
+
     flags[index]=['-ifd']
-    sys.exit(-1) 
+  #  sys.exit(-1) 
 
     print hosts[0] + ' ' + httpports[0] + ' ' + flags[0] + ' file:' + \
         args.nodes_address_file
