@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-from execo import TaktukRemote, TaktukPut, default_connection_params, logger, Process
+from execo import TaktukRemote, TaktukPut, default_connection_params, logger, Process, Put
 from execo_g5k import *
 import os, sys, argparse
 from time import sleep 
@@ -39,6 +39,10 @@ def main():
     deployed, undeployed = deploy(Deployment(nodes, env_name = "jessie-x64-nfs"))
     logger.info("%i deployed, %i undeployed" % (len(deployed), len(undeployed)))
  
+    ## Copy local .ssh to remote nodes: 
+    logger.info('Copy ssh entries into root of each node')
+    Put(nodes, ['/home/'+whoami+'/.ssh/id_rsa','/home/'+whoami+'/.ssh/id_rsa.pub'],'.ssh/.').run()
+
     ## Configure Host OSes
     logger.info('Finalize node customization')
     # use root to connect on the host
