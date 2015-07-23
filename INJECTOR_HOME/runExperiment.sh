@@ -42,9 +42,14 @@ function executeExperiment {
        ./runNodes.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID
     fi
     
+  
+    if [ $? -ne 0 ] ; then
+       exit 1 
+    fi
+ 
     echo "  Please wait 20 seconds that the ring becomes more stabilized"
     sleep 20 
-
+   
     echo "  Start the injection phase (with user: $USER)"
     cd $INJECTOR_HOME
     ./runInjector.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE --user $USER 

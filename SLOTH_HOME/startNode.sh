@@ -9,6 +9,8 @@
 
 
 # run node with given port and http-port
+echo "java -DSlothMode=$1 -DnodePort="$2" -DExperimentId="$3" -jar ./target/sloth.jar ${*:4}"
+ 
 java -DSlothMode=$1 -DnodePort="$2" -DExperimentId="$3" -jar ./target/sloth.jar ${*:4} 
 if [ $? -eq 0 ]; then
     echo "The chord peer has not been correctly started, please see the log"
