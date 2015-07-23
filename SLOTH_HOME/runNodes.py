@@ -50,7 +50,7 @@ def main():
     akkaports = [s.strip().split(':')[1] for s in nodesInfos]
     httpports = [s.strip().split(':')[2] for s in nodesInfos]
     flags = ['-ifd'] + ['-fd'] * (args.nbNodes - 1)
-    delays = [float(x) / 10 for x in range(0, args.nbNodes * 3, 3)]
+    delays = [float(x) / 10 for x in range(0, args.nbNodes * 2, 2)]
 
     print hosts[0] + ' ' + httpports[0] + ' ' + flags[0] + ' file:' + \
         args.nodes_address_file

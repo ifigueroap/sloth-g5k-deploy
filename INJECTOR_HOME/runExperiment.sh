@@ -47,8 +47,9 @@ function executeExperiment {
        exit 1 
     fi
  
-    echo "  Please wait 20 seconds that the ring becomes more stabilized"
-    sleep 20 
+    WAIt = 10 
+    echo "  Please wait $WAIT seconds that the ring becomes more stabilized"
+    sleep $WAIT 
    
     echo "  Start the injection phase (with user: $USER)"
     cd $INJECTOR_HOME

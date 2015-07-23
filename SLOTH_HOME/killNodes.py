@@ -16,7 +16,7 @@ args = parser.parse_args()
 # retrieve the list of hosts from the file
 hosts = list(set([line.strip().split(':')[0] for line in open(args.nodes_address_file)]))
 print "Killing hosts" + str(hosts)
-
+filtered_hosts=list(set(hosts))
 logger.info('kill java sloth peers')
-TaktukRemote('pkill -9 -f sloth.jar ', hosts).run()
+TaktukRemote('pkill -9 -f sloth.jar ', filtered_hosts).run()
 
