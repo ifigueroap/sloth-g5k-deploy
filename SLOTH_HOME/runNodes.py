@@ -61,7 +61,7 @@ def main():
     sorted_peers = [h for (h,sha) in hp_shas ]
     #positions = [sorted_peers.index(h+':'+p) for (h,p) in zip(hosts, akkaports)]
     #print positions
-    delays = [sorted_peers.index(h+':'+p)*.3 for (h,p) in zip(hosts, akkaports)]
+    delays = [sorted_peers.index(h+':'+p)*.5 for (h,p) in zip(hosts, akkaports)]
     print delays
     delays[0]=0
 
