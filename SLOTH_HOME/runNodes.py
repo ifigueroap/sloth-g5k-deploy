@@ -40,11 +40,11 @@ def main():
     except IOError as e:
         print "I/O error({0}) on " + args.nodes_address_file + \
             ": {1}".format(e.errno, e.strerror)
-        sys.exit()
+        sys.exit(1)
 
     if len(nodesInfos) != args.nbNodes:
         print "There is no enough addresses in the file"
-        sys.exit()
+        sys.exit(1)
 
     hosts = [s.strip().split(':')[0] for s in nodesInfos]
     akkaports = [s.strip().split(':')[1] for s in nodesInfos]
@@ -89,6 +89,9 @@ def main():
             p_nb= p_nb + 1
 
     print "%d Peers have been launched" % (p_nb)
+    if p_nb != args.nbNodes:
+        print "Unfortunately you requested %d peers, so bye bye (you can try to relaunch it with %d peers, it can run ...)" % (args.nbNodes, p_nb)
+        sys.exit(1)
 
 
 if __name__ == "__main__":
