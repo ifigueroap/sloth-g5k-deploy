@@ -38,11 +38,12 @@ def main():
     try:
         nodesFile = open(args.nodes_address_file)
         nodesInfos = [next(nodesFile) for x in range(args.nbNodes)]
+        nodesFile.close()
     except IOError as e:
         print "I/O error({0}) on " + args.nodes_address_file + \
             ": {1}".format(e.errno, e.strerror)
         sys.exit(1)
-
+     
     if len(nodesInfos) != args.nbNodes:
         print "There is no enough addresses in the file"
         sys.exit(1)
@@ -65,12 +66,18 @@ def main():
     print delays
     index = delays.index(0)
     print str(index) + ':'+str(len(flags))+':'+str(len(delays))
-
-    flags[index]=['-ifd']
-  #  sys.exit(-1) 
-
-    print hosts[0] + ' ' + httpports[0] + ' ' + flags[0] + ' file:' + \
-        args.nodes_address_file
+    flags[index]='-ifd'
+   
+    ## Overwrite the nodes address file
+    nodesFile = open(args.nodes_address_file, 'w')
+    nhosts = [s.strip().split(':')[0] for s in sorted_peers]
+    nakkaports  = [s.strip().split(':')[1] for s in sorted_peers]
+    for (h,p) in zip(nhosts,nakkaports): 
+        nodesFile.write("%s:%s:%d\n" % (h,p,int(p)+5000))
+    nodesFile.close()
+    
+    
+    print "%s %s %s file:%s "%(hosts[index],httpports[index],flags[index],args.nodes_address_file)
 
     #print hosts
     #print akkaports
