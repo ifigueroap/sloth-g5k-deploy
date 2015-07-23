@@ -41,13 +41,15 @@ def main():
     hosts  = [s.strip().split(':')[0] for s in nodesInfos]
     
     service_node = str(args.service_node)
-    #print 'file:'+str(args.nodes_address_file) 
-    cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
-    cmd = 'pkill -9 -f dhtinjector.jar ; rm -rf ~/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-*'
+    cmd = 'pkill -9 -f dhtinjector.jar ; rm -rf ~/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-* ;'
     #print cmd+'(with user:'+login+')'
     launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()
 
+    
+    #print 'file:'+str(args.nodes_address_file) 
+    cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
+    
     injectorLogFileBase = 'injectorLog_' + str(args.experimentId)
     injectorLogFile = injectorLogFileBase + '.csv'
     checkFile = 'summary-' + str(args.experimentId) + '-' + str(args.dataMode) + '.log'
