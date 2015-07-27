@@ -85,13 +85,13 @@ def main():
 #     #print httpports
 #     #print flags
 # 
-#     # Copy the known address file 
-#     filtered_hosts = list(set(hosts))
-#     print 'copy %s on %s' % (args.nodes_address_file, filtered_hosts)
-# 
-#     cp = TaktukPut(filtered_hosts, [str(args.nodes_address_file)],
-#                    remote_location=str(args.nodes_address_file)).run()
-# 
+    # Copy the known address file 
+    filtered_hosts = list(set(hosts))
+    print 'copy %s on %s' % (args.nodes_address_file, filtered_hosts)
+ 
+    cp = TaktukPut(filtered_hosts, [str(args.nodes_address_file)],
+                   remote_location=str(args.nodes_address_file)).run()
+ 
     cmd = 'rm -rf /tmp/sloth ; mkdir -p /tmp/sloth/' + str(args.experimentId) \
         + ' ; cd ~/SLOTH-EXP-TMP/SLOTH_HOME; sleep {{delays}} ; ' + \
         './startNode.sh ' + args.dataMode + ' {{akkaports}} ' + \
