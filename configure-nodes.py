@@ -81,13 +81,13 @@ def main():
     f2.close()
 
     f = open('./service_node.info', 'w')
-    f.write("The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.info %s" % (i,os.getcwd(),nodes[-1].address)) 
+    f.write("The usual(max)  command should be : ./runExperiment.sh in_vivo %d %s/peers.info %s" % (i,os.getcwd(),nodes[-1].address)) 
     f.close()
     
-    print "Nodes are now ready, you should launch ./INJECTOR_HOME/runExperiment.sh ... from the lyon frontend"
+    print "Nodes are now ready, you should launch ./runExperiment.sh ... from the lyon frontend"
     print "The list of sloth peers is in ./peers.info"
     print "The injector will run on %s" % nodes[-1].address
-    print "The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.info %s" % (i,os.getcwd(),nodes[-1].address) 
+    print "The usual(max)  command should be : ./runExperiment.sh in_vivo %d %s/peers.info %s" % (i,os.getcwd(),nodes[-1].address) 
 
   
  
