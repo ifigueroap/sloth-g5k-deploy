@@ -37,6 +37,7 @@ def main():
     TaktukRemote('mkdir ~/SLOTH-EXP-TMP/', frontends, connection_params={'user': str(whoami)}).run()
     TaktukPut(frontends, ['SLOTH_HOME'],'/home/'+str(os.getlogin())+'/SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
     TaktukPut(frontends, ['INJECTOR_HOME'],'/home/'+str(os.getlogin())+'/SLOTH-EXP-TMP/.', connection_params={'user': str(whoami)}).run()
+    TaktukPut(frontends,  ['peers.info'], '/tmp/'+str(os.getlogin())+'-peers.info', connection_params={'user': str(whoami)}).run()
 
 
     test = TaktukPut(frontends, ['' ], connection_params={'user': str(whoami)}).run()
