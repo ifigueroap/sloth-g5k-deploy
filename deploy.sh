@@ -28,7 +28,7 @@ cp -v -p -r $INJECTOR_HOME_DEV/config ./INJECTOR_HOME
 cp -v -p $INJECTOR_HOME_DEV/target/scala-2.10/dhtinjector.jar ./INJECTOR_HOME/target/scala-2.10/
 
 
-read -p "Push to github?" -n 1 -r
+read -p "Push to github? (y/n)" -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
