@@ -55,36 +55,36 @@ def main():
     flags[0] = '-ifd'
     delays = [float(x) / 10 for x in range(0, args.nbNodes * 3, 3)]
      
-#     #@ Build delay according to the peer ID 
-#     hp_shas = [((h+':'+p), int(hashlib.sha1(h+':'+p).hexdigest(),16)) for (h,p) in zip(hosts, akkaports)]
-#     hp_shas.sort(key=lambda t: t[1])
-#     print ([str(hp_sha) + '\n' for hp_sha in hp_shas])
-#  
-#     sorted_peers = [h for (h,sha) in hp_shas ]
-#     #positions = [sorted_peers.index(h+':'+p) for (h,p) in zip(hosts, akkaports)]
-#     #print positions
-#     delays = [sorted_peers.index(h+':'+p)*.5 for (h,p) in zip(hosts, akkaports)]
-#     print delays
-#     index = delays.index(0)
-#     print str(index) + ':'+str(len(flags))+':'+str(len(delays))
-#     flags[index]='-ifd'
-#    
-#     ## Overwrite the nodes address file
-#     nodesFile = open(args.nodes_address_file, 'w')
-#     nhosts = [s.strip().split(':')[0] for s in sorted_peers]
-#     nakkaports  = [s.strip().split(':')[1] for s in sorted_peers]
-#     for (h,p) in zip(nhosts,nakkaports): 
-#         nodesFile.write("%s:%s:%d\n" % (h,p,int(p)+5000))
-#     nodesFile.close()
-#     
-#     
-#     print "%s %s %s file:%s "%(hosts[index],httpports[index],flags[index],args.nodes_address_file)
-# 
-#     #print hosts
-#     #print akkaports
-#     #print httpports
-#     #print flags
-# 
+    #@ Build delay according to the peer ID 
+    hp_shas = [((h+':'+p), int(hashlib.sha1(h+':'+p).hexdigest(),16)) for (h,p) in zip(hosts, akkaports)]
+    hp_shas.sort(key=lambda t: t[1])
+    print ([str(hp_sha) + '\n' for hp_sha in hp_shas])
+ 
+    sorted_peers = [h for (h,sha) in hp_shas ]
+    #positions = [sorted_peers.index(h+':'+p) for (h,p) in zip(hosts, akkaports)]
+    #print positions
+    delays = [sorted_peers.index(h+':'+p)*.5 for (h,p) in zip(hosts, akkaports)]
+    print delays
+    index = delays.index(0)
+    print str(index) + ':'+str(len(flags))+':'+str(len(delays))
+    flags[index]='-ifd'
+   
+    ## Overwrite the nodes address file
+    nodesFile = open(args.nodes_address_file, 'w')
+    nhosts = [s.strip().split(':')[0] for s in sorted_peers]
+    nakkaports  = [s.strip().split(':')[1] for s in sorted_peers]
+    for (h,p) in zip(nhosts,nakkaports): 
+        nodesFile.write("%s:%s:%d\n" % (h,p,int(p)+5000))
+    nodesFile.close()
+    
+    
+    print "%s %s %s file:%s "%(hosts[index],httpports[index],flags[index],args.nodes_address_file)
+
+    #print hosts
+    #print akkaports
+    #print httpports
+    #print flags
+ 
     # Copy the known address file 
     filtered_hosts = list(set(hosts))
     print 'copy %s on %s' % (args.nodes_address_file, filtered_hosts)
