@@ -28,7 +28,7 @@ def main():
 
     args = parser.parse_args()
 
-    otherFlags = "--known-nodes-file " + args.nodes_address_file
+    otherFlags = "--known-peers-file " + args.nodes_address_file
     if args.no_stabilization:
         otherFlags += " --no-stabilization"
 
