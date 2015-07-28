@@ -1,0 +1,10 @@
+digraph sample {
+
+ A -> B [arrowhead=diamond]
+ A -> C
+ B -> A
+ C -> A
+
+
+
+}
