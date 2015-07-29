@@ -4,21 +4,37 @@ from execo_g5k import *
 import os, sys, argparse
 from time import sleep 
 from execo.log import style
-#from execo_g5k.utils import hosts_list
+from execo_g5k.utils import get_oargrid_job_oar_jobs
 from execo_engine.utils import copy_outputs
 
 
 parser = argparse.ArgumentParser(description="Configure the nodes with all mandatory files")
-parser.add_argument('-j', '--job_ids', nargs='+',  help="oar job id (site:jobid,...)", required=True)
+group = parser.add_mutually_exclusive_group(required=True)
+group.add_argument('-j', '--job_ids', nargs='+',  help="oar job id - site:jobid site:jobid ...)")
+group.add_argument('-g', '--grid_job_id', nargs=1, help="grid job id")
+
 
 def main():
     copy_outputs('config.log', 'config.log')
     args = parser.parse_args()
     whoami = os.getlogin()
     logger.info('whoami: %s', whoami)   
- 
-    jobids = args.job_ids
+
+    print args
+    print 'grid_job_id' in args
+    print 'job_ids' in args
+    print args.grid_job_id
+    print args.job_ids
+
+    jobids = []
+    if args.grid_job_id == None:
+        jobids = args.job_ids
+    else:
+        jobids = ["%s:%s" % (site, job_id) for (job_id, site) in get_oargrid_job_oar_jobs(args.grid_job_id)]
+
     logger.info('Using jobs %s', style.emph(' '.join(args.job_ids)))
+
+    sys.exit(-1)
     
     sites  = [j.strip().split(':')[0] for j in jobids]
     frontends = [str('frontend.'+s) for s in sites]
