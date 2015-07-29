@@ -4,7 +4,7 @@ from execo_g5k import *
 import os, sys, argparse
 from time import sleep 
 from execo.log import style
-from execo_g5k.utils import get_oargrid_job_oar_jobs
+from execo_g5k import get_oargrid_job_oar_jobs
 from execo_engine.utils import copy_outputs
 
 
@@ -19,22 +19,15 @@ def main():
     args = parser.parse_args()
     whoami = os.getlogin()
     logger.info('whoami: %s', whoami)   
-
-    print args
-    print 'grid_job_id' in args
-    print 'job_ids' in args
-    print args.grid_job_id
-    print args.job_ids
-
+    
     jobids = []
     if args.grid_job_id == None:
         jobids = args.job_ids
     else:
-        jobids = ["%s:%s" % (site, job_id) for (job_id, site) in get_oargrid_job_oar_jobs(args.grid_job_id)]
+        grid_job_id = int(args.grid_job_id[0])
+        jobids = ["%s:%d" % (site, job_id) for job_id, site in get_oargrid_job_oar_jobs(grid_job_id)]
 
-    logger.info('Using jobs %s', style.emph(' '.join(args.job_ids)))
-
-    sys.exit(-1)
+    logger.info('Using jobs %s', style.emph(' '.join(jobids)))
     
     sites  = [j.strip().split(':')[0] for j in jobids]
     frontends = [str('frontend.'+s) for s in sites]
