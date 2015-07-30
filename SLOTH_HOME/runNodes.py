@@ -23,11 +23,9 @@ parser.add_argument('--nodes_address_file',
                     metavar="F",
                     default="./configuration/nodes_address.txt")
 
-
 def main():
 
     args = parser.parse_args()
-
     otherFlags = "--known-peers-file " + args.nodes_address_file
     if args.no_stabilization:
         otherFlags += " --no-stabilization"
@@ -52,8 +50,6 @@ def main():
     akkaports = [s.strip().split(':')[1] for s in nodesInfos]
     httpports = [s.strip().split(':')[2] for s in nodesInfos]
     flags = ['-fd'] * args.nbNodes
-    #flags[0] = '-ifd'
-    delays = [float(x) / 10 for x in range(0, args.nbNodes * 3, 3)]
      
     #@ Build delay according to the peer ID 
     logger.info("Constructing hashes of peer ids")
@@ -84,31 +80,48 @@ def main():
     logger.info("Putting addresses file %s into hosts %s" % (args.nodes_address_file, filtered_hosts)) 
     cp = TaktukPut(filtered_hosts, [str(args.nodes_address_file)],
                    remote_location=str(args.nodes_address_file)).run()
- 
-    cmd = 'rm -rf /tmp/sloth ; mkdir -p /tmp/sloth/' + str(args.experimentId) \
-        + ' ; cd ~/SLOTH-EXP-TMP/SLOTH_HOME; sleep {{delays}} ; ' + \
-        './startNode.sh ' + args.dataMode + ' {{akkaports}} ' + \
-        str(args.experimentId) + ' --mode ' + args.dataMode + \
-        ' --port {{akkaports}} ' +\
-        '--http-port {{httpports}} {{flags}} ' + otherFlags + \
-        ' 2>&1 > /tmp/sloth/' + str(args.experimentId) + \
-        '/sloth_launcher_{{akkaports}}_' + args.dataMode + '.log 0<&- 2>&- &'
-    print cmd + ':' + login
-    launch_sloths = TaktukRemote(cmd, hosts,
-                                 connection_params={'user': login}).run()
+
+    startNodeCmd = ' '.join(
+        './startNode.sh ' + args.dataMode + ' {{akkaports}}'
+        , str(args.experimentId) + ' --mode ' + args.dataMode
+        , '--port {{akkaports}}'
+        , '--http-port {{httpports}} {{flags}} ' + otherFlags
+        , '2>&1 > /tmp/sloth/' + str(args.experimentId)
+        , '/sloth_launcher_{{akkaports}}_' + args.dataMode + '.log 0<&- 2>&- &'
+    )
+
+    cmd = '; '.join(
+          'rm -rf /tmp/sloth'
+        , 'mkdir -p /tmp/sloth/%d' % args.experimentId
+        , 'cd ~/SLOTH-EXP-TMP/SLOTH_HOME'
+        , 'sleep {{delays}}'
+        , startNodeCmd
+    ) 
+
+    # cmd = 'rm -rf /tmp/sloth ; mkdir -p /tmp/sloth/' + str(args.experimentId) \
+    #     + ' ; cd ~/SLOTH-EXP-TMP/SLOTH_HOME; sleep {{delays}} ; ' + \
+    #     './startNode.sh ' + args.dataMode + ' {{akkaports}} ' + \
+    #     str(args.experimentId) + ' --mode ' + args.dataMode + \
+    #     ' --port {{akkaports}} ' +\
+    #     '--http-port {{httpports}} {{flags}} ' + otherFlags + \
+    #     ' 2>&1 > /tmp/sloth/' + str(args.experimentId) + \
+    #     '/sloth_launcher_{{akkaports}}_' + args.dataMode + '.log 0<&- 2>&- &'-
+
+    logger.info("User: %s Command: %s" % (login, cmd))
+    launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': login}).run()
     
     p_nb=0; 
     for peer in launch_sloths.processes: 
         if not peer.ok:
-            print peer.host
-            print peer.stdout
-            print peer.stderr
+            logger.error(peer.host)
+            logger.error(peer.stdout)
+            logger.error(peer.stderr)
         else: 
             p_nb= p_nb + 1
 
-    print "%d Peers have been launched" % (p_nb)
+    logger.info("%d Peers have been launched" % (p_nb))
     if p_nb != args.nbNodes:
-        print "Unfortunately you requested %d peers, so bye bye (you can try to relaunch it with %d peers, it can run ...)" % (args.nbNodes, p_nb)
+        logger.error("Unfortunately you requested %d peers, so bye bye (you can try to relaunch it with %d peers, it can run ...)" % (args.nbNodes, p_nb))
         sys.exit(1)
 
 
