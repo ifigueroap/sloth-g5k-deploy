@@ -110,7 +110,7 @@ def main():
     with open("remote_cmds_%d.info" % args.experimentId, 'w') as remoteCmdsFile:
         logger.info("Writing peer-specific commands into %s" % remoteCmdsFile)
         for h in hosts:
-            remoteCmdsFile.write(remote_substitute(cmd, hosts, hosts.index(h), (globals(), locals())))
+            remoteCmdsFile.write(remote_substitute(cmd, [Host(h) for h in hosts], hosts.index(h), (globals(), locals())))
             remoteCmdsFile.write("\n")
 
     logger.info("Launching peers... this may take a while ...")
