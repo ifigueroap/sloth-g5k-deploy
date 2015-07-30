@@ -42,7 +42,7 @@ def main():
     
     service_node = str(args.service_node)
     
-    logger.info("Killing injector processes in service node %s", % service_node)
+    logger.info("Killing injector processes in service node %s" % service_node)
     cmd = 'pkill -9 -f dhtinjector.jar ; rm -rf ~/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-* ;'
     launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()    
 
