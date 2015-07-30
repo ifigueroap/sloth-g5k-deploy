@@ -82,6 +82,14 @@ def main():
     cp = TaktukPut(filtered_hosts, [str(args.nodes_address_file)],
                    remote_location=str(args.nodes_address_file)).run()
 
+    rm_tmp_cmd = ' '.join([
+        'rm -rf /tmp/sloth'
+        , 'mkdir -p /tmp/sloth/%d' % args.experimentId
+    ])
+
+    logger.info("Deleting and recreating /tmp/sloth folder on hosts %s" % filtered_hosts)
+    TaktukRemote(rm_tmp_cmd, filtered_hosts, connection_params={'user':login}).run()
+
     startNodeCmd = ' '.join([
         './startNode.sh ' + args.dataMode + ' {{akkaports}}'
         , str(args.experimentId) + ' --mode ' + args.dataMode
@@ -90,15 +98,12 @@ def main():
         , '2>&1 > /tmp/sloth/'+str(args.experimentId)+'/sloth_launcher_{{akkaports}}_' + args.dataMode + '.log 0<&- 2>&- &'
     ])
 
-    cmd = '; '.join([
-          'rm -rf /tmp/sloth'
-        , 'mkdir -p /tmp/sloth/%d' % args.experimentId
-        , 'cd ~/SLOTH-EXP-TMP/SLOTH_HOME'
+    cmd = '; '.join([      
+        'cd ~/SLOTH-EXP-TMP/SLOTH_HOME'
         , 'sleep {{delays}}'
         , startNodeCmd
-    ]) 
-
-    logger.info("User: %s Command: %s" % (login, cmd))
+    ])
+    logger.info("Launching peers with command: %s" % cmd)
     logger.info("Launching peers... this may take a while ...")
     launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': login}).run()
     
