@@ -87,8 +87,7 @@ def main():
         , str(args.experimentId) + ' --mode ' + args.dataMode
         , '--port {{akkaports}}'
         , '--http-port {{httpports}} {{flags}} ' + otherFlags
-        , '2>&1 > /tmp/sloth/' + str(args.experimentId)
-        , '/sloth_launcher_{{akkaports}}_' + args.dataMode + '.log 0<&- 2>&- &'
+        , '2>&1 > /tmp/sloth/'+str(args.experimentId)+'/sloth_launcher_{{akkaports}}_' + args.dataMode + '.log 0<&- 2>&- &'
     ])
 
     cmd = '; '.join([
