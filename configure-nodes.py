@@ -90,7 +90,7 @@ def main():
     f2.close()
 
     f = open('./service_node.info', 'w')
-    f.write("%s" % (i,os.getcwd(),nodes[-1].address)) 
+    f.write("%s" % nodes[-1].address) 
     f.close()
     
     logger.info("Nodes are now ready, you should launch ./runExperiment.sh ... from the lyon frontend")
