@@ -5,7 +5,7 @@ import subprocess
 import time
 import argparse
 import hashlib
-from execo import TaktukRemote, TaktukPut
+from execo import TaktukRemote, TaktukPut, logger
 
 parser = argparse.ArgumentParser(description="Run Sloth DHT Nodes")
 parser.add_argument('nbNodes', type=int, metavar="N", help="Number of nodes")
@@ -40,12 +40,12 @@ def main():
         nodesInfos = [next(nodesFile) for x in range(args.nbNodes)]
         nodesFile.close()
     except IOError as e:
-        print "I/O error({0}) on " + args.nodes_address_file + \
-            ": {1}".format(e.errno, e.strerror)
+        logger.error("I/O error({0}) on " + args.nodes_address_file + \
+            ": {1}".format(e.errno, e.strerror))
         sys.exit(1)
      
     if len(nodesInfos) != args.nbNodes:
-        print "There is no enough addresses in the file"
+        logger.error("There is no enough addresses in the file")
         sys.exit(1)
 
     hosts = [s.strip().split(':')[0] for s in nodesInfos]
@@ -56,39 +56,32 @@ def main():
     delays = [float(x) / 10 for x in range(0, args.nbNodes * 3, 3)]
      
     #@ Build delay according to the peer ID 
+    logger.info("Constructing hashes of peer ids")
     hp_shas = [((h+':'+p), int(hashlib.sha1(h+':'+p).hexdigest(),16)) for (h,p) in zip(hosts, akkaports)]
-    hp_shas.sort(key=lambda t: t[1])
-    print ([str(hp_sha) + '\n' for hp_sha in hp_shas])
- 
+    hp_shas.sort(key=lambda t: t[1]) 
+
+    logger.info("Creating sorted peers list and corresponding delays")    
     sorted_peers = [h for (h,sha) in hp_shas ]
-    #positions = [sorted_peers.index(h+':'+p) for (h,p) in zip(hosts, akkaports)]
-    #print positions
     delays = [sorted_peers.index(h+':'+p)*.5 for (h,p) in zip(hosts, akkaports)]
-    print delays
+
+    logger.info("Setting -ifd flags for initial peer")
     index = delays.index(0)
-    print str(index) + ':'+str(len(flags))+':'+str(len(delays))
     flags[index]='-ifd'
    
     ## Overwrite the nodes address file
+    logger.info("Overwriting nodes address file, now with sorted peers")
     nodesFile = open(args.nodes_address_file, 'w')
     nhosts = [s.strip().split(':')[0] for s in sorted_peers]
     nakkaports  = [s.strip().split(':')[1] for s in sorted_peers]
     for (h,p) in zip(nhosts,nakkaports): 
         nodesFile.write("%s:%s:%d\n" % (h,p,int(p)+5000))
-    nodesFile.close()
+    nodesFile.close()    
     
-    
-    print "%s %s %s file:%s "%(hosts[index],httpports[index],flags[index],args.nodes_address_file)
-
-    #print hosts
-    #print akkaports
-    #print httpports
-    #print flags
+    logger.info("Initial peer: %s:%s with flags %s" % (hosts[index],httpports[index],flags[index]))
  
     # Copy the known address file 
     filtered_hosts = list(set(hosts))
-    print 'copy %s on %s' % (args.nodes_address_file, filtered_hosts)
- 
+    logger.info("Putting addresses file %s into hosts %s" % (args.nodes_address_file, filtered_hosts)) 
     cp = TaktukPut(filtered_hosts, [str(args.nodes_address_file)],
                    remote_location=str(args.nodes_address_file)).run()
  
