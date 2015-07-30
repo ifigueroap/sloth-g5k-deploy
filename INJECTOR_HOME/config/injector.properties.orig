@@ -8,7 +8,7 @@
 
 ## REST Address of the hosts
 ## each line should be HOST:AKKAPORT:HTTPPORT (please note that we are only using HTTPPORT in the injector)
-dht.nodesaddress = /tmp/ismael-peers.info
+dht.nodesaddress = /tmp/nodes_address.txt
 
 # The duration of the simulation (in sec)
 # Default: 1800
@@ -23,7 +23,7 @@ injection.mode = in_vivo
 
 # The number of peers that constitute the overlay
 # Default : 50
-peers.number =5
+peers.number = 5
 
 # The number of objects to populate in the DHT (initialization phase)
 # Default: 1024
