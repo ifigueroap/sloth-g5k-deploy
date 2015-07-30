@@ -107,11 +107,12 @@ def main():
 
     logger.info("Launching peers with command: %s" % cmd)
 
-    with open("remote_cmds_%d.info" % args.experimentId, 'w') as remoteCmdsFile:
-        logger.info("Writing peer-specific commands into %s" % remoteCmdsFile)
-        for h in hosts:
-            remoteCmdsFile.write(remote_substitute(cmd, [Host(h) for h in hosts], hosts.index(h), (globals(), locals())))
-            remoteCmdsFile.write("\n")
+    remoteCmdsFile = open("remote_cmds_%d.info" % args.experimentId, 'w')
+    logger.info("Writing peer-specific commands into %s" % remoteCmdsFile)
+    for h in hosts:
+        remoteCmdsFile.write(remote_substitute(cmd, [Host(h) for h in hosts], hosts.index(h), (globals(), locals())))
+        remoteCmdsFile.write("\n")
+    remoteCmdsFile.close()
 
     logger.info("Launching peers... this may take a while ...")
     launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': login}).run()
