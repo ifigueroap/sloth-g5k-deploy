@@ -31,6 +31,7 @@ def main():
         otherFlags += " --no-stabilization"
 
     login = str(os.getlogin())
+    logger.info("Running Experiment: %d with user %s" %(args.experimentId, login))
 
     # Retrieve the right number of lines
     try:
@@ -81,22 +82,22 @@ def main():
     cp = TaktukPut(filtered_hosts, [str(args.nodes_address_file)],
                    remote_location=str(args.nodes_address_file)).run()
 
-    startNodeCmd = ' '.join(
+    startNodeCmd = ' '.join([
         './startNode.sh ' + args.dataMode + ' {{akkaports}}'
         , str(args.experimentId) + ' --mode ' + args.dataMode
         , '--port {{akkaports}}'
         , '--http-port {{httpports}} {{flags}} ' + otherFlags
         , '2>&1 > /tmp/sloth/' + str(args.experimentId)
         , '/sloth_launcher_{{akkaports}}_' + args.dataMode + '.log 0<&- 2>&- &'
-    )
+    ])
 
-    cmd = '; '.join(
+    cmd = '; '.join([
           'rm -rf /tmp/sloth'
         , 'mkdir -p /tmp/sloth/%d' % args.experimentId
         , 'cd ~/SLOTH-EXP-TMP/SLOTH_HOME'
         , 'sleep {{delays}}'
         , startNodeCmd
-    ) 
+    ]) 
 
     # cmd = 'rm -rf /tmp/sloth ; mkdir -p /tmp/sloth/' + str(args.experimentId) \
     #     + ' ; cd ~/SLOTH-EXP-TMP/SLOTH_HOME; sleep {{delays}} ; ' + \
