@@ -6,6 +6,7 @@ import time
 import argparse
 import hashlib
 from execo import TaktukRemote, TaktukPut, logger
+from execo.substitutions import remote_substitute
 
 parser = argparse.ArgumentParser(description="Run Sloth DHT Nodes")
 parser.add_argument('nbNodes', type=int, metavar="N", help="Number of nodes")
@@ -103,6 +104,13 @@ def main():
         , 'sleep {{delays}}'
         , startNodeCmd
     ])
+
+    with open("remote_cmds_%d.info" % args.experimentId, 'w') as remoteCmdsFile:
+        logger.info("Writing peer-specific commands into %s" % remoteCmdsFile)
+        for h in hosts:
+            remoteCmdsFile.write(remote_substitute(cmd, hosts, hosts.index(h), (globals(), locals())))
+            remoteCmdsFile.write("\n")
+
     logger.info("Launching peers with command: %s" % cmd)
     logger.info("Launching peers... this may take a while ...")
     launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': login}).run()
