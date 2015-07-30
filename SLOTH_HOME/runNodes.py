@@ -5,7 +5,7 @@ import subprocess
 import time
 import argparse
 import hashlib
-from execo import TaktukRemote, TaktukPut, logger
+from execo import TaktukRemote, TaktukPut, logger, Host
 from execo.substitutions import remote_substitute
 
 parser = argparse.ArgumentParser(description="Run Sloth DHT Nodes")
