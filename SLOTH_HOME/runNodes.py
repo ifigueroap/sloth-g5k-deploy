@@ -98,16 +98,8 @@ def main():
         , startNodeCmd
     ]) 
 
-    # cmd = 'rm -rf /tmp/sloth ; mkdir -p /tmp/sloth/' + str(args.experimentId) \
-    #     + ' ; cd ~/SLOTH-EXP-TMP/SLOTH_HOME; sleep {{delays}} ; ' + \
-    #     './startNode.sh ' + args.dataMode + ' {{akkaports}} ' + \
-    #     str(args.experimentId) + ' --mode ' + args.dataMode + \
-    #     ' --port {{akkaports}} ' +\
-    #     '--http-port {{httpports}} {{flags}} ' + otherFlags + \
-    #     ' 2>&1 > /tmp/sloth/' + str(args.experimentId) + \
-    #     '/sloth_launcher_{{akkaports}}_' + args.dataMode + '.log 0<&- 2>&- &'-
-
     logger.info("User: %s Command: %s" % (login, cmd))
+    logger.info("Launching peers... this may take a while ...")
     launch_sloths = TaktukRemote(cmd, hosts, connection_params={'user': login}).run()
     
     p_nb=0; 

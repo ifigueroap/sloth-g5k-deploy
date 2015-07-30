@@ -4,7 +4,7 @@ import os
 import subprocess
 import time
 import argparse
-from execo import Remote, TaktukPut
+from execo import Remote, TaktukPut, logger
 
 parser = argparse.ArgumentParser(description="Run the Sloth Injector")
 parser.add_argument('nbNodes', type=int, metavar="N", help="Number of nodes")
@@ -31,23 +31,22 @@ def main():
         nodesFile = open(args.nodes_address_file)
         nodesInfos = [next(nodesFile) for x in range(args.nbNodes)]
     except IOError as e:
-       print "I/O error({0}) on "+args.nodes_address_file+": {1}".format(e.errno, e.strerror)
+       logger.error("I/O error({0}) on "+args.nodes_address_file+": {1}".format(e.errno, e.strerror))
        sys.exit()
    
     if len(nodesInfos) < int(args.nbNodes):
-        print "There is no enough addresses in the file (%d requested/%d available)" % (args.nbNodes, len(nodesInfos))
+        logger.error("There is no enough addresses in the file (%d requested/%d available)" % (args.nbNodes, len(nodesInfos)))
         sys.exit()
     
     hosts  = [s.strip().split(':')[0] for s in nodesInfos]
     
     service_node = str(args.service_node)
     
+    logger.info("Killing injector processes in service node %s", % service_node)
     cmd = 'pkill -9 -f dhtinjector.jar ; rm -rf ~/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-* ;'
-    #print cmd+'(with user:'+login+')'
-    launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()
+    launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()    
 
-    
-    #print 'file:'+str(args.nodes_address_file) 
+    logger.info("Putting node addresses file %s into service node %s" % (args.nodes_address_file, service_node))
     cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
     injectorLogFileBase = 'injectorLog_' + str(args.experimentId)
@@ -73,10 +72,10 @@ def main():
       ,'./querycsv.py -i '+injectorLogFile+' "SELECT COUNT(*) AS get_failures FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\" and operation == \\\"Get()\\\"">> '+checkFile
       ,'./querycsv.py -i '+injectorLogFile+' "SELECT COUNT(*) AS put_failures FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\" and operation == \\\"Put()\\\"">> '+checkFile
     ])
-    print service_node +'/'+ cmd
-    
+
+    logger.info("%s/executing command %s" % (service_node, cmd))    
     launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()
-    print "The injector has been launched." 
+    logger.info("The injector has been launched.")
 
 if __name__ == "__main__":
     try: 
