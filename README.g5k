@@ -42,7 +42,7 @@ funk -r econome:4,parapide:3 -m free -w 6:30:00 -o "-t deploy  -t allow_classic_
 
 ## ####
 ## Third step -  Launch the experiment has proposed by the ./configure-nodes.py file
-export SLOTH_HOME=~/slot-g5k-deploy/SLOTH_HOME
+export SLOTH_HOME=~/sloth-g5k-deploy/SLOTH_HOME
 export INJECTOR_HOME=~/sloth-g5k-deploy/INJECTOR_HOME
 ./runExperiment.sh in_vivo 64 /home/alebre/sloth-g5k-deploy/peers.list paravent-1.rennes.grid5000.fr
 

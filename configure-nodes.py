@@ -4,21 +4,30 @@ from execo_g5k import *
 import os, sys, argparse
 from time import sleep 
 from execo.log import style
-#from execo_g5k.utils import hosts_list
+from execo_g5k import get_oargrid_job_oar_jobs
 from execo_engine.utils import copy_outputs
 
 
 parser = argparse.ArgumentParser(description="Configure the nodes with all mandatory files")
-parser.add_argument('-j', '--job_ids', nargs='+',  help="oar job id (site:jobid,...)", required=True)
+group = parser.add_mutually_exclusive_group(required=True)
+group.add_argument('-j', '--job_ids', nargs='+',  help="oar job id - site:jobid site:jobid ...)")
+group.add_argument('-g', '--grid_job_id', nargs=1, help="grid job id")
+
 
 def main():
     copy_outputs('config.log', 'config.log')
     args = parser.parse_args()
     whoami = os.getlogin()
     logger.info('whoami: %s', whoami)   
- 
-    jobids = args.job_ids
-    logger.info('Using jobs %s', style.emph(' '.join(args.job_ids)))
+    
+    jobids = []
+    if args.grid_job_id == None:
+        jobids = args.job_ids
+    else:
+        grid_job_id = int(args.grid_job_id[0])
+        jobids = ["%s:%d" % (site, job_id) for job_id, site in get_oargrid_job_oar_jobs(grid_job_id)]
+
+    logger.info('Using jobs %s', style.emph(' '.join(jobids)))
     
     sites  = [j.strip().split(':')[0] for j in jobids]
     frontends = [str('frontend.'+s) for s in sites]
@@ -39,14 +48,14 @@ def main():
     deployed, undeployed = deploy(Deployment(nodes, env_name = "jessie-x64-nfs"))
     logger.info("%i deployed, %i undeployed" % (len(deployed), len(undeployed)))
  
-    ## Copy local .ssh to remote nodes: 
-    logger.info('Copy ssh entries into root of each node')
-    Put(nodes, ['/home/'+whoami+'/.ssh/id_rsa','/home/'+whoami+'/.ssh/id_rsa.pub'],'.ssh/.').run()
-
     ## Configure Host OSes
     logger.info('Finalize node customization')
     # use root to connect on the host
     default_connection_params['user'] = 'root'
+
+    ## Copy local .ssh to remote nodes: 
+    logger.info('Copy ssh entries into root of each node')
+    Put(nodes, ['/home/'+whoami+'/.ssh/id_rsa','/home/'+whoami+'/.ssh/id_rsa.pub'],'.ssh/.').run()
 
     ## Install missing packages
     logger.info('| - Install Packages')   
@@ -81,13 +90,14 @@ def main():
     f2.close()
 
     f = open('./service_node.info', 'w')
-    f.write("The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.info %s" % (i,os.getcwd(),nodes[-1].address)) 
+    f.write("%s" % nodes[-1].address) 
     f.close()
     
-    print "Nodes are now ready, you should launch ./INJECTOR_HOME/runExperiment.sh ... from the lyon frontend"
-    print "The list of sloth peers is in ./peers.info"
-    print "The injector will run on %s" % nodes[-1].address
-    print "The usual(max)  command should be : ./INJECTOR_HOME/runExperiment.sh in_vivo %d %s/peers.info %s" % (i,os.getcwd(),nodes[-1].address) 
+    logger.info("Nodes are now ready, you should launch ./runExperiment.sh ... from the lyon frontend")
+    logger.info("The list of sloth peers is in ./peers.info")
+    logger.info("The service node is in ./service_node.info")
+    logger.info("The injector will run on %s" % nodes[-1].address)
+    logger.info("The usual(max)  command should be : ./runExperiment.sh in_vivo %d %s/peers.info %s" % (i,os.getcwd(),nodes[-1].address))
 
   
  

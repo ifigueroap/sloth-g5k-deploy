@@ -45,7 +45,14 @@ def main():
 
     ## Get Injector logs 
     logger.info('get log files of the injector ('+str(args.service_node)+')')
-    remote_files=['/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-eager.log', '/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-lazy.log'] 
+    remote_files=['/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-eager.log', 
+	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/failures-'+str(args.experiment_id)+'-eager.log',
+	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/summary-'+str(args.experiment_id)+'-eager.log',
+	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/injectorLog-'+str(args.experiment_id)+'-eager.log',
+	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-lazy.log',
+	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/failures-'+str(args.experiment_id)+'-lazy.log',
+	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/summary-'+str(args.experiment_id)+'-lazy.log',
+	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/injectorLog-'+str(args.experiment_id)+'-lazy.log'] 
 
     test = Get(str(args.service_node), remote_files, results_path, connection_params={'user': str(whoami)}).run()
  

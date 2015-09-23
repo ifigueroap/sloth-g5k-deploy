@@ -1,2 +1,7 @@
 *.log
 *.csv
+*.txt
+*.info
+peers.info
+hosts.info
+tmp

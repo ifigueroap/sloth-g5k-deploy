@@ -1,0 +1,62 @@
+To run SLOTH on your local machine you should first get the code:
+
+### Setting up SSH
+## You need to be able to do a successful login to
+## localhost without being asked for a password.  In other words, the
+## following command must succeed:
+
+ssh localhost
+
+## If you are asked for a password, it means your authorized_keys
+## files does not have your current ssh key. You need to do something like:
+
+cat ~/.ssh/your_pub_key.pub >> ~/.ssh/authorized_keys
+
+### Getting the code
+## This gets you all the jars and the deployment scripts in python
+
+git clone https://github.com/ifigueroap/sloth-g5k-deploy.git
+
+### Environment variables
+## You need to set the following environmental variables
+
+export SLOTH_HOME = /path/to/sloth-g5k-deploy/SLOTH_HOME
+export INJECTOR_HOME = /path/to/sloth-g5k-deploy/INJECTOR_HOME
+ 
+### Setting up SLOTH-EXP-TMP
+## Then you need to have a ~/SLOTH-EXP-TMP folder. 
+## This path is hardcoded in some of the deploy scripts, so it *has* to be this exact folder.
+## The easy way to do this and being always up to date is to 
+## create a symlink to the deploy folder.
+
+ln -s /path/to/sloth-g5k-deploy/ ~/SLOTH-EXP-TMP
+
+### Generate the peers.info file for localhost
+## This files contains the host:akkaport:httpport configuration to run the experiment.
+## For running locally, you should run:
+
+/path/to/sloth-g5k-deploy/localhost-peers.sh N
+
+## where N is the number of peers you want the file to have. You can use a large N
+## and then run the experiments with any number up to N. The system will take just
+## the required number of peers from the file
+
+### Running the experiment
+## Use the following command to run the experiment.
+## Be careful, as each peer will start its own JVM process.
+
+./runExperiment.sh in_vivo 64 /path/to/sloth-g5k-deploy/peers.list localhost
+
+## Here the last argument is the service node, which in the local case will always be localhost.
+
+### Getting the results
+## The injector log will be at $INJECTOR_HOME/dhtinjector-log-EXPERIMENTID.log file.
+## The EXPERIMENTID will be shown on your screen when you run the experiment.
+
+### Killing the peers
+## Run:
+
+$SLOTH_HOME/killNodes -f /path/to/peers.list
+
+## Dependencies
+## TBD
