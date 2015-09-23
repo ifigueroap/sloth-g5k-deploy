@@ -49,7 +49,7 @@ def main():
     logger.info("Putting node addresses file %s into service node %s" % (args.nodes_address_file, service_node))
     cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
-    injectorLogFileBase = 'injectorLog_' + str(args.experimentId)
+    injectorLogFileBase = 'injectorLog-' + str(args.experimentId) + '-' + str(args.dataMode)
     injectorLogFile = injectorLogFileBase + '.csv'
     checkFile = 'summary-' + str(args.experimentId) + '-' + str(args.dataMode) + '.log'
     dhtLogFile = 'dhtinjector-log-'+str(args.experimentId)+'-'+str(args.dataMode)+'.log'
