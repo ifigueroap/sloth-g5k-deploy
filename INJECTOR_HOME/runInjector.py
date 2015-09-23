@@ -64,7 +64,16 @@ def main():
       ,'sed "s:dht.peersaddress.*:dht.peersaddress = "'+args.nodes_address_file+'":g" ./config/injector.properties > /tmp/injector.properties'
       ,'cp /tmp/injector.properties ./config/injector.properties'
       ,'java -jar target/scala-2.10/dhtinjector.jar 2>&1 > ' + dhtLogFile + ' 0<&- 2>&-'
-      ,'mv ./injectorLog.csv ' + injectorLogFile
+    ]
+
+    cmd = ";".join(cmdLines)
+    logger.info("%s/executing command %s" % (service_node, "\n".join(cmdLines)))    
+    launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()
+    
+    
+    cmdLines = [
+       'cd ~/SLOTH-EXP-TMP/INJECTOR_HOME/.'
+      ,'mv ./injectorLog.csv ' + injectorLogFile + ' 2>&1 > /tmp/errorFile'
       ,'./querycsv.py -i '+injectorLogFile+' -o '+failuresFile+' "SELECT * FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\""'
       ,'tail -n 6 '+dhtLogFile+' > '+checkFile
       ,'./querycsv.py -i '+injectorLogFile+' "SELECT COUNT(*) AS total_failures FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\"" >> '+checkFile 
@@ -73,9 +82,9 @@ def main():
     ]
 
     cmd = ";".join(cmdLines)
-
     logger.info("%s/executing command %s" % (service_node, "\n".join(cmdLines)))    
     launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()
+    
     logger.info("The injector has been launched.")
 
 if __name__ == "__main__":
