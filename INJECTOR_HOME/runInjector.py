@@ -49,11 +49,11 @@ def main():
     logger.info("Putting node addresses file %s into service node %s" % (args.nodes_address_file, service_node))
     cp = TaktukPut(service_node, [str(args.nodes_address_file)], remote_location=str(args.nodes_address_file)).run()
     
-    injectorLogFileBase = 'injectorLog-' + str(args.experimentId) + '-' + str(args.dataMode)
+    injectorLogFileBase = 'injectorLog_' + str(args.experimentId) + '_' + str(args.dataMode)
     injectorLogFile = injectorLogFileBase + '.csv'
-    checkFile = 'summary-' + str(args.experimentId) + '-' + str(args.dataMode) + '.log'
-    dhtLogFile = 'dhtinjector-log-'+str(args.experimentId)+'-'+str(args.dataMode)+'.log'
-    failuresFile = 'failures-'+str(args.experimentId)+'-'+str(args.dataMode)+'.log'
+    checkFile = 'summary_' + str(args.experimentId) + '_' + str(args.dataMode) + '.log'
+    dhtLogFile = 'dhtinjector_log_'+str(args.experimentId)+'_'+str(args.dataMode)+'.log'
+    failuresFile = 'failures_'+str(args.experimentId)+'_'+str(args.dataMode)+'.log'
 
     cmdLines = [
        'cd ~/SLOTH-EXP-TMP/INJECTOR_HOME/.'
@@ -76,13 +76,13 @@ def main():
       ,'mv ./injectorLog.csv ' + injectorLogFile + ' 2>&1 > /tmp/errorFile'
       ,'./querycsv.py -i '+injectorLogFile+' -o '+failuresFile+' "SELECT * FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\""'
       ,'tail -n 6 '+dhtLogFile+' > '+checkFile
-      ,'./querycsv.py -i '+injectorLogFile+' "SELECT COUNT(*) AS total_failures FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\"" >> '+checkFile 
-      ,'./querycsv.py -i '+injectorLogFile+' "SELECT COUNT(*) AS get_failures FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\" and operation == \\\"Get()\\\"">> '+checkFile
-      ,'./querycsv.py -i '+injectorLogFile+' "SELECT COUNT(*) AS put_failures FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\" and operation == \\\"Put()\\\"">> '+checkFile
+      ,'./querycsv.py -i '+injectorLogFile+" 'SELECT COUNT(*) AS total_failures FROM " + injectorLogFileBase + " WHERE status == \"FAILURE\"' >>" + checkFile
+      ,'./querycsv.py -i '+injectorLogFile+" 'SELECT COUNT(*) AS get_failures FROM "   + injectorLogFileBase + " WHERE status == \"FAILURE\" and operation == \"Get()\"' >> " + checkFile
+      ,'./querycsv.py -i '+injectorLogFile+" 'SELECT COUNT(*) AS put_failures FROM "   + injectorLogFileBase + " WHERE status == \"FAILURE\" and operation == \"Put()\"' >> " + checkFile
     ]
 
     cmd = ";".join(cmdLines)
-    logger.info("%s/executing command %s" % (service_node, "\n".join(cmdLines)))    
+    logger.info("%s/executing command %s" % (service_node, "\n" + "\n".join(cmdLines)))
     launch_sloths = Remote(cmd,service_node, connection_params={'user': login}).run()
     
     logger.info("The injector has been launched.")
