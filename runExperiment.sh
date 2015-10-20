@@ -8,6 +8,11 @@ if [ $# -ne 4 ]; then
 	exit
 fi
 
+if [ ! -d "$HOME/SLOTH-EXP-TMP" ]; then
+	echo "The ~/SLOTH-EXP-TMP folder must be created before being able to run an experiment. Please create it."
+        exit
+fi
+
 EXPERIMENTID=$RANDOM
 echo "Experiment with Id: " $EXPERIMENTID
 
