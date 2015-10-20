@@ -23,7 +23,11 @@ def main():
     
     hosts  = [s.strip().split(':')[0] for s in nodesInfos]
     hosts_filtered=list(set(hosts))
-    frontends = list(set([str('frontend.'+get_host_site(h)) for h in hosts]))
+
+    print hosts
+    print hosts_filtered
+    # No frontends when run locally...
+    # frontends = list(set([str('frontend.'+get_host_site(h)) for h in hosts]))
 
     #Create local direction
     results_path='~/SLOTH-EXP-RESULTS/'+str(args.experiment_id)+'/'
@@ -45,20 +49,29 @@ def main():
 
     ## Get Injector logs 
     logger.info('get log files of the injector ('+str(args.service_node)+')')
-    remote_files=['/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-eager.log', 
-	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/failures-'+str(args.experiment_id)+'-eager.log',
-	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/summary-'+str(args.experiment_id)+'-eager.log',
-	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/injectorLog-'+str(args.experiment_id)+'-eager.log',
-	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector-log-'+str(args.experiment_id)+'-lazy.log',
-	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/failures-'+str(args.experiment_id)+'-lazy.log',
-	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/summary-'+str(args.experiment_id)+'-lazy.log',
-	'/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/injectorLog-'+str(args.experiment_id)+'-lazy.log'] 
+    remote_files=[
+        '/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector_log_'+str(args.experiment_id)+'_eager.log'
+        , '/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/failures_'+str(args.experiment_id)+'_eager.log'
+	, '/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/summary_'+str(args.experiment_id)+'_eager.log'
+	, '/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/injectorLog_'+str(args.experiment_id)+'_eager.csv'
+	, '/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/dhtinjector_log_'+str(args.experiment_id)+'_lazy.log'
+        , '/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/failures_'+str(args.experiment_id)+'_lazy.log'
+	, '/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/summary_'+str(args.experiment_id)+'_lazy.log'
+	, '/home/'+str(whoami)+'/SLOTH-EXP-TMP/INJECTOR_HOME/injectorLog_'+str(args.experiment_id)+'_lazy.csv'
+    ] 
 
     test = Get(str(args.service_node), remote_files, results_path, connection_params={'user': str(whoami)}).run()
+
+    rm_tmp_cmd = '; '.join([
+        'rm -rf /tmp/sloth'
+    ])
+
+    logger.info("Deleting /tmp/sloth folder on hosts %s" % hosts_filtered)
+    TaktukRemote(rm_tmp_cmd, hosts_filtered, connection_params={'user':whoami}).run()
  
-   ## CP peers.list
+    ## CP peers.list
     logger.info('cp peers list')
-    os.system('cp '+args.nodes_address_file+' '+results_path) 
+    os.system('cp '+args.nodes_address_file+' '+results_path)
  
 if __name__ == "__main__":
     main()

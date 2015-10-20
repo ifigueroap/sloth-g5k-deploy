@@ -15,6 +15,7 @@ INJECTION_MODE=$1
 NBNODE=$2
 ORIG_NODEFILE=$3 
 SERVICENODE=$4
+THEPWD=$PWD
 
 function executeExperiment {
     MODE=$1
@@ -55,10 +56,9 @@ function executeExperiment {
     cd $INJECTOR_HOME
     ./runInjector.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE --user $USER 
 
- 
     #    echo "Killing peers"
-#    cd $SLOTH_HOME
-#    ./killNodes.py --nodes_address_file $NODEFILE
+    #    cd $SLOTH_HOME
+    #    ./killNodes.py --nodes_address_file $NODEFILE
 }
 
 echo "Executing Eager Experiment"
@@ -66,6 +66,11 @@ executeExperiment eager
 
 echo "Executing Lazy Experiment"
 executeExperiment lazy
+
+echo "Collecting results"
+echo "./get-results.py -f $NODEFILE -s $SERVICENODE -e $EXPERIMENTID"
+cd $THEPWD
+./get-results.py -f $NODEFILE -s $SERVICENODE -e $EXPERIMENTID
 
 # echo "Processing logs and creating ECDF plots"
 # #Process logs and create ECDF plots
