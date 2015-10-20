@@ -84,11 +84,12 @@ def main():
                    remote_location=str(args.nodes_address_file)).run()
 
     rm_tmp_cmd = '; '.join([
-        'rm -rf /tmp/sloth'
-        , 'mkdir -p /tmp/sloth/%d' % args.experimentId
+        ## 'rm -rf /tmp/sloth'
+        ## , 'mkdir -p /tmp/sloth/%d' % args.experimentId
+        'mkdir -p /tmp/sloth/%d' % args.experimentId
     ])
 
-    logger.info("Deleting and recreating /tmp/sloth folder on hosts %s" % filtered_hosts)
+    logger.info("Recreating /tmp/sloth/%d folder on hosts %s" % (args.experimentId, filtered_hosts))
     TaktukRemote(rm_tmp_cmd, filtered_hosts, connection_params={'user':login}).run()
 
     startNodeCmd = ' '.join([
