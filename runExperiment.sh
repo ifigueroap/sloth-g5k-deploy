@@ -64,8 +64,8 @@ function executeExperiment {
 echo "Executing Eager Experiment"
 executeExperiment eager 
 
-#echo "Executing Lazy Experiment"
-#executeExperiment lazy
+echo "Executing Lazy Experiment"
+executeExperiment lazy
 
 # echo "Processing logs and creating ECDF plots"
 # #Process logs and create ECDF plots
