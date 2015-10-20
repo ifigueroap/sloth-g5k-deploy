@@ -53,7 +53,8 @@ injector.putperiod = 180
 # 2678400 => 1 month
 # 16070400 => 6 months
 # Assumming 50.000 peer, and 6 months one crash every means 1 node crashes every 321.5 seconds
-injector.crashperiod = 600
+##injector.crashperiod = 600
+injector.crashperiod = 0
 
 # TODO: write calculator for rates
 
@@ -61,7 +62,7 @@ injector.crashperiod = 600
 # The duration of a crash (i.e. before a peer comes back to the overlay)
 # (in sec)
 # Default: 300
-injector.crashduration = 600
+injector.crashduration = 70
 
 # The average period of a removal (in sec)
 # (in sec)
