@@ -63,7 +63,7 @@ def main():
       ,'cp /tmp/injector.properties ./config/injector.properties'
       ,'sed "s:dht.peersaddress.*:dht.peersaddress = "'+args.nodes_address_file+'":g" ./config/injector.properties > /tmp/injector.properties'
       ,'cp /tmp/injector.properties ./config/injector.properties'
-      ,'java -jar target/scala-2.10/dhtinjector.jar 2>&1 > ' + dhtLogFile + ' 0<&- 2>&-'
+      ,'java -DdataMode='+ str(args.dataMode)+ ' -DexperimentId='+ str(args.experimentId) +' -jar target/scala-2.10/dhtinjector.jar 2>&1 > ' + dhtLogFile + ' 0<&- 2>&-'
     ]
 
     cmd = ";".join(cmdLines)
@@ -75,7 +75,9 @@ def main():
        'cd ~/SLOTH-EXP-TMP/INJECTOR_HOME/.'
       ,'mv ./injectorLog.csv ' + injectorLogFile + ' 2>&1 > /tmp/errorFile'
       ,'./querycsv.py -i '+injectorLogFile+' -o '+failuresFile+' "SELECT * FROM '+injectorLogFileBase+' WHERE status == \\\"FAILURE\\\""'
-      ,'tail -n 6 '+dhtLogFile+' > '+checkFile
+
+      # Grab last lines from dhtLogFile with the summary data
+      ,'tail -n 23 '+dhtLogFile+' > '+checkFile
       ,'./querycsv.py -i '+injectorLogFile+" 'SELECT COUNT(*) AS total_failures FROM " + injectorLogFileBase + " WHERE status == \"FAILURE\"' >>" + checkFile
       ,'./querycsv.py -i '+injectorLogFile+" 'SELECT COUNT(*) AS get_failures FROM "   + injectorLogFileBase + " WHERE status == \"FAILURE\" and operation == \"Get()\"' >> " + checkFile
       ,'./querycsv.py -i '+injectorLogFile+" 'SELECT COUNT(*) AS put_failures FROM "   + injectorLogFileBase + " WHERE status == \"FAILURE\" and operation == \"Put()\"' >> " + checkFile
