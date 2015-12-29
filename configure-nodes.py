@@ -59,7 +59,7 @@ def main():
 
     ## Install missing packages
     logger.info('| - Install Packages')   
-    install_packages = TaktukRemote('export DEBIAN_MASTER=noninteractive ; export https_proxy="https://proxy:3128"; apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y --force-yes python-pip lynx openjdk-7-jdk uuid-runtime cpufrequtils kanif -o Acquire::Check-Valid-Until=false -o Dpkgtions::="--force-confdef" -o Dpkgtions::="--force-confold" ; pip install tabview', nodes).run()
+    install_packages = TaktukRemote('export DEBIAN_MASTER=noninteractive ; export https_proxy="https://proxy:3128"; apt-get -o Acquire::Check-Valid-Until=false update && apt-get install -y --force-yes python-pip lynx openjdk-8-jdk uuid-runtime cpufrequtils kanif -o Acquire::Check-Valid-Until=false -o Dpkgtions::="--force-confdef" -o Dpkgtions::="--force-confold" ; pip install tabview', nodes).run()
     ## Fix ulimit and related stuffs
     logger.info('| - set limit related stuffs')
     cmd = 'ulimit -c unlimited; sysctl -w vm.max_map_count=331072 ; echo 120000 > /proc/sys/kernel/threads-max ; echo 600000 > /proc/sys/vm/max_map_count ; echo 200000 > /proc/sys/kernel/pid_max' 
