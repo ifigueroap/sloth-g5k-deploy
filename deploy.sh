@@ -34,7 +34,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
    # do dangerous stuff
    echo "Adding to git..."
-   git add .
+   git add . --all
    git commit -m "New release of Sloth / Injector"
    git push
 fi
