@@ -3,8 +3,8 @@
 : ${SLOTH_HOME?"The SLOTH_HOME environment variable should be set (please proceed: export SLOTH_HOME=...)"}
 : ${INJECTOR_HOME?"The INJECTOR_HOME environment variable should be set (please proceed: export INJECTOR_HOME=...)"}
 
-if [ $# -ne 4 ]; then 
-	echo "Usage: ./runExperiment.sh INJECTION_MODE NBNODE NODEFILE SERVICENODE"
+if [ $# -le 4 ]; then 
+	echo "Usage: ./runExperiment.sh INJECTION_MODE NBNODE NODEFILE SERVICENODE (INJECTOR_PARAMS)*"
 	exit
 fi
 
@@ -21,6 +21,11 @@ NBNODE=$2
 ORIG_NODEFILE=$3 
 SERVICENODE=$4
 THEPWD=$PWD
+
+INJECTOR_PARAMS=${@:5}
+
+echo $INJECTOR_PARAMS
+
 
 function executeExperiment {
     MODE=$1
@@ -59,7 +64,7 @@ function executeExperiment {
    
     echo "  Start the injection phase (with user: $USER)"
     cd $INJECTOR_HOME
-    ./runInjector.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE --user $USER 
+    ./runInjector.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE --user $USER $INJECTOR_PARAMS
 
     #    echo "Killing peers"
     #    cd $SLOTH_HOME
