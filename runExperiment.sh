@@ -3,7 +3,7 @@
 : ${SLOTH_HOME?"The SLOTH_HOME environment variable should be set (please proceed: export SLOTH_HOME=...)"}
 : ${INJECTOR_HOME?"The INJECTOR_HOME environment variable should be set (please proceed: export INJECTOR_HOME=...)"}
 
-if [ $# -le 4 ]; then 
+if [ $# -lt 4 ]; then 
 	echo "Usage: ./runExperiment.sh INJECTION_MODE NBNODE NODEFILE SERVICENODE (INJECTOR_PARAMS)*"
 	exit
 fi
@@ -82,10 +82,19 @@ echo "./get-results.py -f $NODEFILE -s $SERVICENODE -e $EXPERIMENTID"
 cd $THEPWD
 ./get-results.py -f $NODEFILE -s $SERVICENODE -e $EXPERIMENTID
 
+echo "Consolidating analytics logs"
+echo "cat ~/SLOTH-EXP-RESULTS/$EXPERIMENTID/eager/analytics-* > ~/SLOTH-EXP-RESULTS/$EXPERIMENTID/eager/analytics.log"
+cat ~/SLOTH-EXP-RESULTS/$EXPERIMENTID/eager/analytics-* > ~/SLOTH-EXP-RESULTS/$EXPERIMENTID/eager/analytics.log
+
+echo "cat ~/SLOTH-EXP-RESULTS/$EXPERIMENTID/lazy/analytics-* > ~/SLOTH-EXP-RESULTS/$EXPERIMENTID/lazy/analytics.log"
+cat ~/SLOTH-EXP-RESULTS/$EXPERIMENTID/lazy/analytics-* > ~/SLOTH-EXP-RESULTS/$EXPERIMENTID/lazy/analytics.log
+
 # echo "Processing logs and creating ECDF plots"
 # #Process logs and create ECDF plots
 # cd $SLOTH_HOME
-# Rscript ecdfCLI.R $EXPERIMENTID
+echo "Computing ECDFs"
+echo "Rscript ecdfCLI.r $EXPERIMENTID"
+Rscript ecdfCLI.R $EXPERIMENTID
 
 echo "Done!"
 

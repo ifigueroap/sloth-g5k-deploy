@@ -1,4 +1,5 @@
 #!/usr/bin/python
+
 import sys
 import os
 import subprocess
@@ -101,7 +102,7 @@ def main():
 
     if (args.objectMaxSize is not None):
         cmdLines = cmdLines + [
-              'sed "s/object.maxsize.*/objects.maxsize = ' + str(args.objectMaxSize) + '/g" ./config/injector.properties > /tmp/injector.properties'
+              'sed "s/object.maxsize.*/object.maxsize = ' + str(args.objectMaxSize) + '/g" ./config/injector.properties > /tmp/injector.properties'
             , 'cp /tmp/injector.properties ./config/injector.properties'
         ]
 

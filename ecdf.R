@@ -7,7 +7,7 @@ processReadWriteLogs <- function(experimentId) {
 
     ##### PROCESS LAZY EXPERIMENT
 
-    lazyLogFile <- paste(experimentId, "/lazy/analytics.log", sep="")
+    lazyLogFile <- paste("~/SLOTH-EXP-RESULTS/", experimentId, "/lazy/analytics.log", sep="")
     lazyWriteQuery <- "SELECT * FROM file WHERE V2 = \"LWRITE\""
     lazyWriteData = read.csv.sql(lazyLogFile
       , header = FALSE
@@ -42,7 +42,7 @@ processReadWriteLogs <- function(experimentId) {
 
     ##### PROCESS EAGER EXPERIMENT
 
-    eagerLogFile <- paste(experimentId, "/eager/analytics.log", sep="")
+    eagerLogFile <- paste("~/SLOTH-EXP-RESULTS/", experimentId, "/eager/analytics.log", sep="")
     eagerWriteQuery <- "SELECT * FROM file WHERE V2 = \"EWRITE\""
     eagerWriteData = read.csv.sql(eagerLogFile
       , header = FALSE
