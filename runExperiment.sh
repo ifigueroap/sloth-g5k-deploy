@@ -29,6 +29,7 @@ echo $INJECTOR_PARAMS
 
 function executeExperiment {
     MODE=$1
+
     echo "Starting ${MODE} Experiment"
 
     NODEFILE=/tmp/$(whoami)-$( basename $ORIG_NODEFILE)
@@ -66,9 +67,6 @@ function executeExperiment {
     cd $INJECTOR_HOME
     ./runInjector.py $NBNODE $MODE --nodes_address_file $NODEFILE --experimentId $EXPERIMENTID  --service_node $SERVICENODE --user $USER $INJECTOR_PARAMS
 
-    #    echo "Killing peers"
-    #    cd $SLOTH_HOME
-    #    ./killNodes.py --nodes_address_file $NODEFILE
 }
 
 echo "Executing Eager Experiment"
